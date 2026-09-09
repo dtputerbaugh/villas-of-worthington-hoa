@@ -185,12 +185,12 @@ each one marks a spot still waiting on real information:
 - **Home page:** the "Resident Portal (PayHOA)" button needs its real link
   once it's available.
 
-The Contact page's mailing-address text ("official mail goes to the
-current Board President's address on file, confirmed by emailing the
-Board") is meant to stand as-is rather than as a placeholder — it avoids
-publishing a board member's home address while still telling residents
-how to reach the Association by mail. Change it only if the Board adopts
-a different mailing address (e.g., a PO box).
+The Contact page's mailing address is the Board President's home address,
+which the Board formally adopted as the Association's official mailing
+address in the July 21, 2026 meeting minutes. If the Board later adopts a
+different address (a new President's address, a PO box, etc.), update the
+address block on `contact.html` and note the source (e.g., the minutes
+that changed it).
 
 ## Previewing changes before you commit (optional, for anyone comfortable
 with a terminal)
