@@ -84,7 +84,7 @@ document.addEventListener("DOMContentLoaded", function () {
     );
     lines.push("");
     lines.push("Typed Name (serves as signature): " + v("signatureName"));
-    lines.push("Date: " + v("signatureDate"));
+    if (v("signatureDate")) lines.push("Date: " + v("signatureDate"));
 
     lines.push("");
     lines.push(RULE);

@@ -152,6 +152,12 @@ attach any files, and click Send themselves.
 - Because this relies on the visitor's own email app, it won't work for
   someone without one configured on their device — the direct email
   address on the Contact page is the fallback for that case.
+- Browsers can cache `.js` files, so a visitor who has the ARC page
+  already open (or revisits it soon after) may keep running the *old*
+  script even after a new version is live. Whenever `arc-form.js`
+  changes, bump the `?v=` number on its `<script>` tag in
+  `arc-request.html` (e.g. `arc-form.js?v=3`) — that forces every
+  browser to fetch the new version instead of a cached one.
 
 ## Updating the Finances page
 
