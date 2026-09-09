@@ -37,42 +37,58 @@ document.addEventListener("DOMContentLoaded", function () {
 
     var attachments = checkedLabels("attachments");
 
+    // Plain-text email bodies can't carry real formatting (bold, color,
+    // HTML), so "clean" here just means: a short banner, a divider line
+    // between sections instead of running everything together, and a
+    // closing line so the Board can see at a glance this came from the
+    // website form rather than a forwarded/copied message.
+    var RULE = "----------------------------------------";
     var lines = [];
+    var section = function (title) {
+      if (lines.length) lines.push("");
+      lines.push(title);
+      lines.push(RULE);
+    };
+
     lines.push("ARCHITECTURAL CHANGE REQUEST");
-    lines.push("");
-    lines.push("OWNER & PROPERTY INFORMATION");
+    lines.push("Villas of Worthington HOA");
+
+    section("OWNER & PROPERTY INFORMATION");
     lines.push("Owner Name(s): " + v("ownerName"));
     lines.push("Property Address: " + v("propertyAddress"));
     lines.push("Phone: " + v("phone"));
     lines.push("Email: " + v("email"));
     if (v("mailingAddress")) lines.push("Mailing Address (if different): " + v("mailingAddress"));
-    lines.push("");
-    lines.push("TYPE OF REQUEST");
+
+    section("TYPE OF REQUEST");
     lines.push(requestTypes.length ? requestTypes.join(", ") : "(none selected)");
-    lines.push("");
-    lines.push("DESCRIPTION OF PROPOSED WORK");
+
+    section("DESCRIPTION OF PROPOSED WORK");
     lines.push(v("description"));
-    lines.push("");
 
     if (v("contractorName") || v("startDate") || v("endDate")) {
-      lines.push("CONTRACTOR INFORMATION");
+      section("CONTRACTOR INFORMATION");
       if (v("contractorName")) lines.push("Contractor Name: " + v("contractorName"));
       if (v("startDate")) lines.push("Estimated Start Date: " + v("startDate"));
       if (v("endDate")) lines.push("Estimated Completion Date: " + v("endDate"));
-      lines.push("");
     }
 
-    lines.push("ATTACHMENTS THE REQUESTER PLANS TO INCLUDE");
+    section("ATTACHMENTS THE REQUESTER PLANS TO INCLUDE");
     lines.push(attachments.length ? attachments.join(", ") : "(none noted)");
-    lines.push("");
-    lines.push("OWNER CERTIFICATION");
+
+    section("OWNER CERTIFICATION");
     lines.push(
       "Requester confirmed: reviewed the Design Guidelines and Declaration " +
         "provisions applicable to this request and agrees to complete the " +
         "work as described above."
     );
+    lines.push("");
     lines.push("Typed Name (serves as signature): " + v("signatureName"));
     lines.push("Date: " + v("signatureDate"));
+
+    lines.push("");
+    lines.push(RULE);
+    lines.push("Submitted via the Villas of Worthington HOA website's ARC Request form.");
 
     var subjectAddress = v("propertyAddress") || v("ownerName") || "Villas of Worthington";
     var subject = "ARC Request — " + subjectAddress;
