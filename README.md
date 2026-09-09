@@ -186,10 +186,12 @@ For text that isn't in a JSON file — like the officer names on
 `about.html` or the resident portal link on `index.html` — open the
 relevant `.html` file in GitHub, click the pencil/edit icon, and change
 the text directly. Look for `<!-- TODO ... -->` comments in the files —
-each one marks a spot still waiting on real information:
+each one marks a spot still waiting on real information.
 
-- **Home page:** the "Resident Portal (PayHOA)" button needs its real link
-  once it's available.
+The home page's "Resident Portal (PayHOA)" button links to the
+community's PayHOA sign-up page. If that link ever changes (a new PayHOA
+account, a straight login link instead of sign-up, etc.), it's the `href`
+on that one button near the top of `index.html`.
 
 The Contact page's mailing address is the Board President's home address,
 which the Board formally adopted as the Association's official mailing
