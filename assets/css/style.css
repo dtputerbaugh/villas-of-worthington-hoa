@@ -377,6 +377,12 @@ img {
   font-weight: 600;
 }
 
+.officer-term {
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+  margin-top: 0.3rem;
+}
+
 /* ---- Documents list -------------------------------------------------- */
 
 .doc-list {
