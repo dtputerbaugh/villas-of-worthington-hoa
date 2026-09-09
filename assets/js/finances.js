@@ -12,9 +12,14 @@ document.addEventListener("DOMContentLoaded", function () {
     "var(--series-7)",
   ];
 
+  var UNIT_COUNT = 114;
+
   // 2025 actual operating spending, grouped into resident-readable
-  // categories. Source: Board's 2025 actuals (from the 2026 budget
-  // analysis). Total $44,305 against $45,600 in assessment income.
+  // categories, plus the small surplus the Association didn't spend.
+  // Source: Board's 2025 actuals (from the 2026 budget analysis).
+  // Spending categories total $44,305; the unspent line brings the total
+  // up to the full $45,600 in 2025 assessment income -- $400.00 per unit
+  // exactly, which is what makes the "per homeowner" toggle add up clean.
   var duesBreakdown = [
     { label: "Landscaping, grounds & snow", short: "Landscaping & grounds", value: 16618 },
     { label: "Reserve contribution", short: "Reserve contribution", value: 10207 },
@@ -23,6 +28,7 @@ document.addEventListener("DOMContentLoaded", function () {
     { label: "Insurance", short: "Insurance", value: 2525 },
     { label: "Administrative & other", short: "Admin & other", value: 2221 },
     { label: "Utilities", short: "Utilities", value: 1719 },
+    { label: "Unspent (retained)", short: "Unspent (retained)", value: 1295, neutral: true },
   ];
 
   // Reserve component replacement cost, from the 2025 Reserve Study
@@ -53,9 +59,51 @@ document.addEventListener("DOMContentLoaded", function () {
     { year: 2030, pct: 94.2 },
   ];
 
-  renderSankey("dues-sankey", "dues-sankey-caption", "dues-legend", "dues-table", duesBreakdown, "$", 44305, "2025 dues spent");
+  setupDuesSankey();
   renderStackedBar("reserve-bar", "reserve-legend", "reserve-table", reserveAllocation, "$");
   renderLineChart("pct-funded-chart", pctFunded);
+
+  // Wires up the HOA Total / Per Homeowner toggle above the dues Sankey,
+  // then draws it in whichever mode is currently active.
+  function setupDuesSankey() {
+    var totalBtn = document.getElementById("dues-toggle-total");
+    var unitBtn = document.getElementById("dues-toggle-unit");
+    var mode = "total";
+
+    function draw() {
+      if (mode === "unit") {
+        var perUnitData = duesBreakdown.map(function (d) {
+          return Object.assign({}, d, { value: d.value / UNIT_COUNT });
+        });
+        renderSankey(
+          "dues-sankey", "dues-sankey-caption", "dues-legend", "dues-table",
+          perUnitData, "$", 400, "Per homeowner, 2025", 2
+        );
+      } else {
+        renderSankey(
+          "dues-sankey", "dues-sankey-caption", "dues-legend", "dues-table",
+          duesBreakdown, "$", 45600, "Association-wide, 2025", 0
+        );
+      }
+    }
+
+    if (totalBtn && unitBtn) {
+      totalBtn.addEventListener("click", function () {
+        mode = "total";
+        totalBtn.classList.add("is-active");
+        unitBtn.classList.remove("is-active");
+        draw();
+      });
+      unitBtn.addEventListener("click", function () {
+        mode = "unit";
+        unitBtn.classList.add("is-active");
+        totalBtn.classList.remove("is-active");
+        draw();
+      });
+    }
+
+    draw();
+  }
 
   // A single-source flow diagram: one bar (total dues) fans out into a
   // ribbon per category. Deliberately carries no text of its own -- the
@@ -63,7 +111,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // scaled to any width, so the diagram can be fully responsive. Labels,
   // amounts and percentages live in the HTML legend below instead, which
   // is what actually needs to stay legible on a narrow phone.
-  function renderSankey(containerId, captionId, legendId, tableId, data, prefix, total, sourceLabel) {
+  function renderSankey(containerId, captionId, legendId, tableId, data, prefix, total, sourceLabel, decimals) {
     var el = document.getElementById(containerId);
     var caption = document.getElementById(captionId);
     var legend = document.getElementById(legendId);
@@ -73,7 +121,7 @@ document.addEventListener("DOMContentLoaded", function () {
     total = total || data.reduce(function (sum, d) { return sum + d.value; }, 0);
 
     if (caption) {
-      caption.textContent = sourceLabel + " — " + formatMoney(total, prefix) + " total";
+      caption.textContent = sourceLabel + " — " + formatMoney(total, prefix, decimals) + " total";
     }
 
     var width = 340;
@@ -94,12 +142,14 @@ document.addEventListener("DOMContentLoaded", function () {
     // contiguous source-side slice (the source bar has no gaps).
     var destTop = padTop;
     var srcCum = 0;
-    var nodes = data.map(function (d, i) {
+    var colorIndex = 0;
+    var nodes = data.map(function (d) {
       var destH = (d.value / total) * usableH;
       var srcH = (d.value / total) * H;
+      var color = d.neutral ? "var(--line)" : SERIES[colorIndex++ % SERIES.length];
       var node = {
         d: d,
-        color: SERIES[i % SERIES.length],
+        color: color,
         destY0: destTop,
         destY1: destTop + destH,
         srcY0: padTop + srcCum,
@@ -123,9 +173,10 @@ document.addEventListener("DOMContentLoaded", function () {
           " " + (srcX + nodeW) + "," + n.srcY1.toFixed(1) +
           " Z";
         var pct = ((n.d.value / total) * 100).toFixed(1);
-        var title = n.d.label + ": " + formatMoney(n.d.value, prefix) + " (" + pct + "%)";
+        var title = n.d.label + ": " + formatMoney(n.d.value, prefix, decimals) + " (" + pct + "%)";
+        var dash = n.d.neutral ? ' stroke-dasharray="5 3" stroke="var(--ink-soft)" stroke-width="1"' : "";
         return (
-          '<path class="sankey-ribbon" d="' + d + '" fill="' + n.color + '"><title>' +
+          '<path class="sankey-ribbon" d="' + d + '" fill="' + n.color + '"' + dash + "><title>" +
           escapeHtml(title) + "</title></path>"
         );
       })
@@ -163,7 +214,7 @@ document.addEventListener("DOMContentLoaded", function () {
         labelSpan.textContent = n.d.label;
         var valueSpan = document.createElement("span");
         valueSpan.className = "legend-value";
-        valueSpan.textContent = formatMoney(n.d.value, prefix) + " · " + pct + "%";
+        valueSpan.textContent = formatMoney(n.d.value, prefix, decimals) + " · " + pct + "%";
         li.appendChild(swatch);
         li.appendChild(labelSpan);
         li.appendChild(valueSpan);
@@ -177,7 +228,7 @@ document.addEventListener("DOMContentLoaded", function () {
           var pct = ((d.value / total) * 100).toFixed(1);
           return (
             "<tr><td>" + escapeHtml(d.label) + "</td><td>" +
-            formatMoney(d.value, prefix) + "</td><td>" + pct + "%</td></tr>"
+            formatMoney(d.value, prefix, decimals) + "</td><td>" + pct + "%</td></tr>"
           );
         })
         .join("");
@@ -339,7 +390,10 @@ document.addEventListener("DOMContentLoaded", function () {
       "</svg>";
   }
 
-  function formatMoney(n, prefix) {
-    return (prefix || "") + Math.round(n).toLocaleString("en-US");
+  function formatMoney(n, prefix, decimals) {
+    var opts = decimals
+      ? { minimumFractionDigits: decimals, maximumFractionDigits: decimals }
+      : { maximumFractionDigits: 0 };
+    return (prefix || "") + n.toLocaleString("en-US", opts);
   }
 });

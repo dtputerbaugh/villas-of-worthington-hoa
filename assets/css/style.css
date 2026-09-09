@@ -838,6 +838,44 @@ img {
   font-size: 0.85rem;
 }
 
+/* Toggle group (e.g. HOA Total vs. Per Homeowner) */
+
+.toggle-group {
+  display: inline-flex;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-bottom: 1.25rem;
+}
+
+.toggle-btn {
+  border: none;
+  background: #fff;
+  padding: 0.5rem 1.1rem;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+
+.toggle-btn + .toggle-btn {
+  border-left: 1px solid var(--line);
+}
+
+.toggle-btn:hover {
+  background: var(--paper-alt);
+}
+
+.toggle-btn.is-active {
+  background: var(--accent-dark);
+  color: #fff;
+}
+
+.toggle-btn.is-active:hover {
+  background: var(--accent-dark);
+}
+
 /* Sankey (single-source flow) -- carries no text of its own, so it's
    safe to let it scale freely to any width, including on mobile. */
 

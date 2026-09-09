@@ -81,11 +81,18 @@
     <div class="container">
       <h2>Where your HOA dues go</h2>
       <p>
-        Based on 2025 actual operating spending (excludes reserve fund
-        balance activity beyond the annual contribution).
+        Based on the Association's full 2025 assessment income: what was
+        actually spent in each category, plus the small surplus retained in
+        the operating fund rather than spent (not itself a spending
+        category). Toggle below to see it as an Association-wide total or
+        per individual homeowner.
       </p>
 
       <div class="chart-card">
+        <div class="toggle-group" role="group" aria-label="Show amounts as">
+          <button type="button" class="toggle-btn is-active" id="dues-toggle-total">HOA Total</button>
+          <button type="button" class="toggle-btn" id="dues-toggle-unit">Per Homeowner</button>
+        </div>
         <p class="sankey-caption" id="dues-sankey-caption"></p>
         <div class="sankey-wrap" id="dues-sankey"></div>
         <ul class="chart-legend" id="dues-legend"></ul>
