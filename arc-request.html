@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>ARC Request — Villas at Worthington HOA</title>
 <meta name="description" content="Submit an architectural change request to the Villas at Worthington Homeowners Association Board.">
+<link rel="icon" type="image/png" href="assets/img/favicon.png">
 <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
@@ -55,15 +56,9 @@
         <fieldset>
           <legend>Owner &amp; Property Information</legend>
 
-          <div class="form-row two-col">
-            <div class="field">
-              <label class="field-label" for="ownerName">Owner Name(s) <span class="required-mark">*</span></label>
-              <input type="text" id="ownerName" name="ownerName" required>
-            </div>
-            <div class="field">
-              <label class="field-label" for="lot">Lot #</label>
-              <input type="text" id="lot" name="lot">
-            </div>
+          <div class="field">
+            <label class="field-label" for="ownerName">Owner Name(s) <span class="required-mark">*</span></label>
+            <input type="text" id="ownerName" name="ownerName" required>
           </div>
 
           <div class="field">
@@ -121,20 +116,9 @@
 
         <fieldset>
           <legend>Contractor Information (if applicable)</legend>
-          <div class="form-row two-col">
-            <div class="field">
-              <label class="field-label" for="contractorName">Contractor Name</label>
-              <input type="text" id="contractorName" name="contractorName">
-            </div>
-            <div class="field">
-              <label class="field-label" for="contractorLicensed">License / Insurance on File?</label>
-              <select id="contractorLicensed" name="contractorLicensed">
-                <option value=""></option>
-                <option value="Yes">Yes</option>
-                <option value="No">No</option>
-                <option value="N/A">N/A</option>
-              </select>
-            </div>
+          <div class="field">
+            <label class="field-label" for="contractorName">Contractor Name</label>
+            <input type="text" id="contractorName" name="contractorName">
           </div>
           <div class="form-row two-col">
             <div class="field">
@@ -160,8 +144,6 @@
             <label class="checkbox-item"><input type="checkbox" name="attachments" value="drawings" data-label="Detailed drawings, specifications, or product sheets"> Detailed drawings, specifications, or product sheets</label>
             <label class="checkbox-item"><input type="checkbox" name="attachments" value="samples" data-label="Material and color samples"> Material and color samples</label>
             <label class="checkbox-item"><input type="checkbox" name="attachments" value="photos" data-label="Photos of the existing condition"> Photos of the existing condition</label>
-            <label class="checkbox-item"><input type="checkbox" name="attachments" value="insurance" data-label="Contractor's certificate of insurance (if applicable)"> Contractor's certificate of insurance (if applicable)</label>
-            <label class="checkbox-item"><input type="checkbox" name="attachments" value="permit" data-label="Copy of City of North Royalton permit (if required)"> Copy of City of North Royalton permit (if required)</label>
           </div>
         </fieldset>
 

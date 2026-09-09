@@ -194,8 +194,8 @@ img {
 }
 
 .hero-image {
-  flex: 1 1 16rem;
-  max-width: 22rem;
+  flex: 0 0 13rem;
+  max-width: 13rem;
 }
 
 .hero-image img {
@@ -206,11 +206,11 @@ img {
 @media (max-width: 800px) {
   .hero .container {
     flex-direction: column-reverse;
-    align-items: stretch;
+    align-items: center;
   }
 
   .hero-image {
-    max-width: 100%;
+    max-width: 9.5rem;
   }
 }
 
@@ -324,29 +324,6 @@ img {
   margin-top: 0;
 }
 
-/* ---- Photo placeholders -------------------------------------------------- */
-
-.photo-placeholder {
-  border: 2px dashed var(--line);
-  border-radius: var(--radius);
-  background: var(--paper-alt);
-  color: var(--ink-soft);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  font-size: 0.92rem;
-  padding: 2.5rem 1.25rem;
-  min-height: 12rem;
-}
-
-.photo-grid {
-  display: grid;
-  gap: 1.25rem;
-  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
-  margin-top: 1.5rem;
-}
-
 /* ---- Officers table ------------------------------------------------------ */
 
 .officers {
@@ -441,17 +418,6 @@ img {
   color: var(--accent);
   font-weight: 700;
   margin-bottom: 0.35rem;
-}
-
-.todo-note {
-  display: inline-block;
-  margin-top: 0.5rem;
-  font-size: 0.85rem;
-  color: #8a4b2b;
-  background: #fbeee5;
-  border: 1px solid #eccab2;
-  border-radius: 6px;
-  padding: 0.35rem 0.6rem;
 }
 
 /* ---- Footer ---------------------------------------------------------------- */
@@ -569,7 +535,7 @@ img {
 }
 
 .arc-form textarea {
-  min-height: 7rem;
+  min-height: 13rem;
   resize: vertical;
 }
 

@@ -42,7 +42,6 @@ document.addEventListener("DOMContentLoaded", function () {
     lines.push("");
     lines.push("OWNER & PROPERTY INFORMATION");
     lines.push("Owner Name(s): " + v("ownerName"));
-    lines.push("Lot #: " + v("lot"));
     lines.push("Property Address: " + v("propertyAddress"));
     lines.push("Phone: " + v("phone"));
     lines.push("Email: " + v("email"));
@@ -55,10 +54,9 @@ document.addEventListener("DOMContentLoaded", function () {
     lines.push(v("description"));
     lines.push("");
 
-    if (v("contractorName") || v("contractorLicensed") || v("startDate") || v("endDate")) {
+    if (v("contractorName") || v("startDate") || v("endDate")) {
       lines.push("CONTRACTOR INFORMATION");
       if (v("contractorName")) lines.push("Contractor Name: " + v("contractorName"));
-      if (v("contractorLicensed")) lines.push("License / Insurance on File?: " + v("contractorLicensed"));
       if (v("startDate")) lines.push("Estimated Start Date: " + v("startDate"));
       if (v("endDate")) lines.push("Estimated Completion Date: " + v("endDate"));
       lines.push("");

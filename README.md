@@ -19,7 +19,9 @@ paid hosting required. This guide assumes no coding experience.
 │   ├── Declaration.pdf
 │   ├── Bylaws.pdf
 │   ├── Design-Guidelines.pdf
-│   └── Rules-and-Regulations.pdf
+│   ├── Rules-and-Regulations.pdf
+│   ├── Community-Map.pdf
+│   └── Maintenance-Map.pdf
 ├── assets/
 │   ├── css/style.css      All page styling
 │   ├── img/                Logo images
