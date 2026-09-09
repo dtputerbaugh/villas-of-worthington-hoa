@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Documents — Villas at Worthington HOA</title>
+<meta name="description" content="Downloadable governing documents for the Villas at Worthington Homeowners Association.">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <a class="site-title" href="index.html">Villas at Worthington HOA</a>
+    <button class="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false">&#9776;</button>
+    <nav class="site-nav" aria-label="Primary">
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="documents.html" aria-current="page">Documents</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="page-header">
+    <div class="container">
+      <h1>Documents</h1>
+      <p class="lede">
+        Governing documents for Villas at Worthington, available as PDF
+        downloads. This list is generated automatically from
+        <code>documents/documents.json</code> — see this project's
+        <code>README.md</code> for how to add a new document.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <ul class="doc-list" id="doc-list">
+        <li class="doc-list-loading">Loading documents&hellip;</li>
+      </ul>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <span>&copy; <span id="year"></span> Villas at Worthington Homeowners Association, Inc.</span>
+    <span>North Royalton, Ohio</span>
+  </div>
+</footer>
+
+<script src="assets/js/nav.js"></script>
+<script src="assets/js/documents.js"></script>
+<script>document.getElementById("year").textContent = new Date().getFullYear();</script>
+</body>
+</html>

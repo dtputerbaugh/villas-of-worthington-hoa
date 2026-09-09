@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Villas at Worthington HOA</title>
+<meta name="description" content="Official website of the Villas at Worthington Homeowners Association — North Royalton, Ohio.">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <a class="site-title" href="index.html">Villas at Worthington HOA</a>
+    <button class="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false">&#9776;</button>
+    <nav class="site-nav" aria-label="Primary">
+      <ul>
+        <li><a href="index.html" aria-current="page">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="documents.html">Documents</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="container">
+      <div class="eyebrow">North Royalton, Ohio</div>
+      <h1>Welcome to Villas at Worthington</h1>
+      <p class="lede">
+        Villas at Worthington is a 114-unit planned community (PUD) in North
+        Royalton, Ohio. Our Association is self-managed by an all-volunteer
+        Board of Directors, elected from among our neighbors.
+      </p>
+      <div class="hero-actions">
+        <!-- TODO: replace href="#" with the community's real PayHOA resident
+             portal URL once it's confirmed, then remove the "Coming soon"
+             badge and btn-disabled class below. -->
+        <a class="btn btn-primary btn-disabled" href="#" aria-disabled="true">
+          Resident Portal (PayHOA)<span class="badge-pending">Coming soon</span>
+        </a>
+        <a class="btn btn-secondary" href="documents.html">View Documents</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2>Neighborhood photos</h2>
+      <p>Real photos of Villas at Worthington are coming soon.</p>
+      <div class="photo-grid">
+        <!-- TODO: replace each placeholder with a real neighborhood photo
+             (an <img> tag) once photos are available. No stock photography. -->
+        <div class="photo-placeholder">Photo placeholder<br>(neighborhood photo to be added)</div>
+        <div class="photo-placeholder">Photo placeholder<br>(neighborhood photo to be added)</div>
+        <div class="photo-placeholder">Photo placeholder<br>(neighborhood photo to be added)</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2>Looking for something specific?</h2>
+      <div class="card-grid">
+        <div class="card">
+          <h3>Governing documents</h3>
+          <p>Declaration, Bylaws, Design Guidelines, Rules &amp; Regulations, and the Reserve Study.</p>
+          <a href="documents.html">Go to Documents &rarr;</a>
+        </div>
+        <div class="card">
+          <h3>Board &amp; officers</h3>
+          <p>Learn about the Association's structure and who currently serves on the Board.</p>
+          <a href="about.html">Go to About &rarr;</a>
+        </div>
+        <div class="card">
+          <h3>Architectural review</h3>
+          <p>Submitting an ARC request, or have a question for the Board?</p>
+          <a href="contact.html">Go to Contact &rarr;</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <span>&copy; <span id="year"></span> Villas at Worthington Homeowners Association, Inc.</span>
+    <span>North Royalton, Ohio</span>
+  </div>
+</footer>
+
+<script src="assets/js/nav.js"></script>
+<script>document.getElementById("year").textContent = new Date().getFullYear();</script>
+</body>
+</html>
