@@ -972,6 +972,16 @@ img {
   stroke-linejoin: round;
 }
 
+.line-chart .trend-line-projected {
+  fill: none;
+  stroke: var(--series-1);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 5 5;
+  opacity: 0.55;
+}
+
 .line-chart .end-dot {
   fill: var(--series-1);
   stroke: #fff;

@@ -66,6 +66,33 @@ document.addEventListener("DOMContentLoaded", function () {
     { label: "Reserve study updates", value: 660 },
   ];
 
+  // Actual reserve fund balance (cash + CD, fountain aside) at each
+  // year-end, 2019-2025, from the Association's actual Balance Sheets
+  // (APM), plus a mid-2026 point (as of June 30, the most recent
+  // statement available -- not a year-end total, flagged as such in the
+  // page copy). Continues as a projection, 2026-2030, using the 2025
+  // Reserve Study's own year-end cash-flow figures (Exhibit A) -- a
+  // different, more conservative 0.25%-return model than the Board's own
+  // workbook used for the percent-funded chart below, so the dollar
+  // figures here and that chart's percentages won't reconcile exactly.
+  var reserveBalanceActual = [
+    { year: 2019, value: 19626 },
+    { year: 2020, value: 35430 },
+    { year: 2021, value: 39593 },
+    { year: 2022, value: 44140 },
+    { year: 2023, value: 49110 },
+    { year: 2024, value: 68992 },
+    { year: 2025, value: 78099 },
+    { year: 2026, value: 89238, partial: true },
+  ];
+  var reserveBalanceProjected = [
+    { year: 2026, value: 89238 },
+    { year: 2027, value: 93369 },
+    { year: 2028, value: 103545 },
+    { year: 2029, value: 114119 },
+    { year: 2030, value: 125500 },
+  ];
+
   // % funded, 2025-2030, from the Board's reserve funding workbook
   // (which follows the 2025 Reserve Study's contribution schedule and
   // uses a 3% assumed return on invested reserves -- the workbook's own
@@ -121,6 +148,9 @@ document.addEventListener("DOMContentLoaded", function () {
   // along with it -- fine on desktop, close to unreadable on mobile.
   // Measuring the real container width and redrawing at that exact pixel
   // width keeps every label at its designed size on any screen.
+  drawResponsive("reserve-trend-chart", function (w) {
+    renderReserveTrendChart("reserve-trend-chart", reserveBalanceActual, reserveBalanceProjected, w);
+  });
   drawResponsive("pct-funded-chart", function (w) {
     renderLineChart("pct-funded-chart", pctFunded, w);
   });
@@ -428,6 +458,141 @@ document.addEventListener("DOMContentLoaded", function () {
     var div = document.createElement("div");
     div.textContent = str;
     return div.innerHTML;
+  }
+
+  // Actual reserve balance (solid line + area, 2019 through mid-2026),
+  // continuing as a dashed projection (2026-2030, per the Reserve Study's
+  // own cash-flow model) sharing the same starting point so the two
+  // segments join without a gap. Only the first point, the most recent
+  // actual point, and the final projected point get a direct $ label,
+  // per "label the extreme, not every point" -- every point still carries
+  // a hover title.
+  function renderReserveTrendChart(containerId, actualPoints, projectedPoints, width) {
+    var el = document.getElementById(containerId);
+    if (!el) return;
+
+    width = width || 640;
+    var height = 260;
+    var padLeft = 50;
+    var padRight = 16;
+    var padTop = 28;
+    var padBottom = 32;
+    var plotW = width - padLeft - padRight;
+    var plotH = height - padTop - padBottom;
+
+    var years = actualPoints
+      .map(function (p) { return p.year; })
+      .concat(projectedPoints.map(function (p) { return p.year; }));
+    var minYear = Math.min.apply(null, years);
+    var maxYear = Math.max.apply(null, years);
+
+    var allValues = actualPoints.concat(projectedPoints).map(function (p) { return p.value; });
+    var maxVal = Math.max.apply(null, allValues);
+    var step = 20000;
+    var niceMax = Math.ceil((maxVal * 1.15) / step) * step || step;
+
+    function x(year) {
+      return padLeft + ((year - minYear) / (maxYear - minYear)) * plotW;
+    }
+    function y(v) {
+      return padTop + plotH - (v / niceMax) * plotH;
+    }
+
+    var ticks = [];
+    for (var t = 0; t <= niceMax; t += niceMax / 4) ticks.push(t);
+
+    var gridLines = ticks
+      .map(function (v) {
+        return (
+          '<line class="grid-line" x1="' + padLeft + '" x2="' + (width - padRight) +
+          '" y1="' + y(v).toFixed(1) + '" y2="' + y(v).toFixed(1) + '"></line>' +
+          '<text x="' + (padLeft - 8) + '" y="' + y(v).toFixed(1) + '" text-anchor="end" dominant-baseline="middle" font-size="11">' +
+          formatCompactMoney(v) + "</text>"
+        );
+      })
+      .join("");
+
+    function pathFor(points) {
+      return points
+        .map(function (p, i) {
+          return (i === 0 ? "M" : "L") + x(p.year).toFixed(1) + "," + y(p.value).toFixed(1);
+        })
+        .join(" ");
+    }
+
+    var actualLine = pathFor(actualPoints);
+    var actualArea =
+      actualLine +
+      " L" + x(actualPoints[actualPoints.length - 1].year).toFixed(1) + "," + y(0).toFixed(1) +
+      " L" + x(actualPoints[0].year).toFixed(1) + "," + y(0).toFixed(1) + " Z";
+    var projectedLine = pathFor(projectedPoints);
+
+    var allPoints = actualPoints.concat(projectedPoints.slice(1));
+    var dots = allPoints
+      .map(function (p) {
+        var title = p.year + (p.partial ? " (as of June 30)" : "") + ": " + formatMoney(p.value, "$");
+        return (
+          '<circle class="end-dot" cx="' + x(p.year).toFixed(1) + '" cy="' + y(p.value).toFixed(1) +
+          '" r="4"><title>' + escapeHtml(title) + "</title></circle>"
+        );
+      })
+      .join("");
+
+    var labeled = [actualPoints[0], actualPoints[actualPoints.length - 1], projectedPoints[projectedPoints.length - 1]];
+    var labels = labeled
+      .map(function (p, i) {
+        var anchor = i === 0 ? "start" : i === labeled.length - 1 ? "end" : "middle";
+        return (
+          '<text x="' + x(p.year).toFixed(1) + '" y="' + (y(p.value) - 10).toFixed(1) +
+          '" text-anchor="' + anchor + '" font-size="11" font-weight="700" fill="var(--ink)">' +
+          formatMoney(p.value, "$") + "</text>"
+        );
+      })
+      .join("");
+
+    // At narrow widths there isn't room for a label under every one of
+    // the 12 years shown. Always keep the first, the most recent actual
+    // point, and the final projected point; fill in additional
+    // evenly-spaced labels only where they don't collide with those.
+    var allYearPoints = actualPoints.concat(projectedPoints.slice(1));
+    var minLabelSlot = 26;
+    var shown = {};
+    var shownX = [];
+    [0, actualPoints.length - 1, allYearPoints.length - 1].forEach(function (i) {
+      shown[i] = true;
+      shownX.push(x(allYearPoints[i].year));
+    });
+    allYearPoints.forEach(function (p, i) {
+      if (shown[i]) return;
+      var cx = x(p.year);
+      var collides = shownX.some(function (sx) { return Math.abs(sx - cx) < minLabelSlot; });
+      if (!collides) {
+        shown[i] = true;
+        shownX.push(cx);
+      }
+    });
+
+    var xLabels = allYearPoints
+      .map(function (p, i) {
+        if (!shown[i]) return "";
+        return (
+          '<text x="' + x(p.year).toFixed(1) + '" y="' + (height - padBottom + 18) +
+          '" text-anchor="middle" font-size="11">' + p.year + "</text>"
+        );
+      })
+      .join("");
+
+    el.innerHTML =
+      '<svg class="line-chart" viewBox="0 0 ' + width + " " + height +
+      '" role="img" aria-label="Reserve fund balance, actual 2019 through mid-2026, projected 2027 through 2030; full figures are in the table below.">' +
+      gridLines +
+      '<path class="area-fill" d="' + actualArea + '"></path>' +
+      '<path class="trend-line" d="' + actualLine + '"></path>' +
+      '<path class="trend-line-projected" d="' + projectedLine + '"></path>' +
+      dots +
+      labels +
+      xLabels +
+      "</svg>";
   }
 
   function renderLineChart(containerId, points, width) {
