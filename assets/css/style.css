@@ -237,6 +237,13 @@ img {
   margin-top: 1.5rem;
 }
 
+.hero-facts {
+  margin-top: 1.5rem;
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+  letter-spacing: 0.01em;
+}
+
 /* ---- Buttons ------------------------------------------------------------ */
 
 .btn {
@@ -310,8 +317,23 @@ img {
 .card-grid {
   display: grid;
   gap: 1.25rem;
-  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  grid-template-columns: 1fr;
   margin-top: 1.5rem;
+}
+
+/* Fixed column counts (rather than auto-fit) so a 6-card grid always ends
+   balanced -- 3+3 or 2+2+2 -- instead of however many 15rem tiles happen
+   to fit the container width (which gave 4-across-then-1-alone). */
+@media (min-width: 560px) {
+  .card-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 860px) {
+  .card-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
 .card {
@@ -366,25 +388,32 @@ img {
 
 .doc-item {
   display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
+  flex-wrap: nowrap;
+  align-items: flex-start;
   justify-content: space-between;
-  gap: 0.5rem 1.5rem;
+  gap: 1rem;
   padding: 1.15rem 0;
   border-bottom: 1px solid var(--line);
 }
 
-@media (max-width: 560px) {
-  /* Always stack, regardless of how short the title/note happen to be --
-     letting flex-wrap decide made short entries sit side-by-side with the
-     button while longer ones stacked, which read as broken alignment. */
-  .doc-item {
-    flex-direction: column;
-    align-items: stretch;
-  }
+.doc-item .doc-info {
+  flex: 1 1 auto;
+  min-width: 0;
+}
 
+.doc-item .btn,
+.doc-item .doc-status-note {
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+}
+
+@media (max-width: 480px) {
+  /* Keep the button pinned to the right at every width (never dropping
+     below the title/note) -- just tighten it so a long title has enough
+     room to wrap beside it instead of forcing an overflow. */
   .doc-item .btn {
-    align-self: flex-start;
+    padding: 0.6rem 1rem;
+    font-size: 0.88rem;
   }
 }
 
@@ -664,6 +693,27 @@ img {
   margin-bottom: 0;
 }
 
+.finance-disclosure.corrections {
+  border-left-color: var(--series-2);
+}
+
+.finance-disclosure ul {
+  margin: 0.75rem 0 0;
+  padding-left: 1.2rem;
+}
+
+.finance-disclosure li {
+  margin-bottom: 0.75rem;
+}
+
+.finance-disclosure li:last-child {
+  margin-bottom: 0;
+}
+
+.finance-disclosure strong {
+  color: var(--ink);
+}
+
 .kpi-row {
   display: grid;
   gap: 1rem;
@@ -786,6 +836,43 @@ img {
 .chart-legend .legend-value {
   color: var(--ink-soft);
   font-size: 0.85rem;
+}
+
+/* Sankey (single-source flow) -- carries no text of its own, so it's
+   safe to let it scale freely to any width, including on mobile. */
+
+.sankey-caption {
+  font-weight: 700;
+  color: var(--ink);
+  margin: 0 0 0.75rem;
+}
+
+.sankey-wrap {
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+.sankey-wrap svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.sankey .sankey-ribbon {
+  opacity: 0.55;
+}
+
+.sankey .sankey-ribbon:hover {
+  opacity: 0.8;
+}
+
+.sankey .sankey-source-node {
+  fill: var(--accent-dark);
+}
+
+.sankey .sankey-dest-node {
+  stroke: #fff;
+  stroke-width: 1;
 }
 
 /* Line chart */

@@ -16,13 +16,13 @@ document.addEventListener("DOMContentLoaded", function () {
   // categories. Source: Board's 2025 actuals (from the 2026 budget
   // analysis). Total $44,305 against $45,600 in assessment income.
   var duesBreakdown = [
-    { label: "Landscaping, grounds & snow", value: 16618 },
-    { label: "Reserve contribution", value: 10207 },
-    { label: "Management (2025, being phased out)", value: 7800 },
-    { label: "Legal & professional", value: 3215 },
-    { label: "Insurance", value: 2525 },
-    { label: "Administrative & other", value: 2221 },
-    { label: "Utilities", value: 1719 },
+    { label: "Landscaping, grounds & snow", short: "Landscaping & grounds", value: 16618 },
+    { label: "Reserve contribution", short: "Reserve contribution", value: 10207 },
+    { label: "Management (2025, being phased out)", short: "Management (2025)", value: 7800 },
+    { label: "Legal & professional", short: "Legal & professional", value: 3215 },
+    { label: "Insurance", short: "Insurance", value: 2525 },
+    { label: "Administrative & other", short: "Admin & other", value: 2221 },
+    { label: "Utilities", short: "Utilities", value: 1719 },
   ];
 
   // Reserve component replacement cost, from the 2025 Reserve Study
@@ -53,9 +53,139 @@ document.addEventListener("DOMContentLoaded", function () {
     { year: 2030, pct: 94.2 },
   ];
 
-  renderStackedBar("dues-bar", "dues-legend", "dues-table", duesBreakdown, "$");
+  renderSankey("dues-sankey", "dues-sankey-caption", "dues-legend", "dues-table", duesBreakdown, "$", 44305, "2025 dues spent");
   renderStackedBar("reserve-bar", "reserve-legend", "reserve-table", reserveAllocation, "$");
   renderLineChart("pct-funded-chart", pctFunded);
+
+  // A single-source flow diagram: one bar (total dues) fans out into a
+  // ribbon per category. Deliberately carries no text of its own -- the
+  // ribbons only need to stay visually distinct, which holds up fine
+  // scaled to any width, so the diagram can be fully responsive. Labels,
+  // amounts and percentages live in the HTML legend below instead, which
+  // is what actually needs to stay legible on a narrow phone.
+  function renderSankey(containerId, captionId, legendId, tableId, data, prefix, total, sourceLabel) {
+    var el = document.getElementById(containerId);
+    var caption = document.getElementById(captionId);
+    var legend = document.getElementById(legendId);
+    var table = document.getElementById(tableId);
+    if (!el) return;
+
+    total = total || data.reduce(function (sum, d) { return sum + d.value; }, 0);
+
+    if (caption) {
+      caption.textContent = sourceLabel + " — " + formatMoney(total, prefix) + " total";
+    }
+
+    var width = 340;
+    var height = 220;
+    var padTop = 14;
+    var padBottom = 14;
+    var H = height - padTop - padBottom;
+
+    var srcX = 14;
+    var nodeW = 14;
+    var destX = 300;
+    var midX = (srcX + nodeW + destX) / 2;
+
+    var gap = 6;
+    var usableH = H - gap * (data.length - 1);
+
+    // Destination node positions (stacked with gaps), and matching
+    // contiguous source-side slice (the source bar has no gaps).
+    var destTop = padTop;
+    var srcCum = 0;
+    var nodes = data.map(function (d, i) {
+      var destH = (d.value / total) * usableH;
+      var srcH = (d.value / total) * H;
+      var node = {
+        d: d,
+        color: SERIES[i % SERIES.length],
+        destY0: destTop,
+        destY1: destTop + destH,
+        srcY0: padTop + srcCum,
+        srcY1: padTop + srcCum + srcH,
+      };
+      destTop += destH + gap;
+      srcCum += srcH;
+      return node;
+    });
+
+    var ribbons = nodes
+      .map(function (n) {
+        var d =
+          "M" + (srcX + nodeW) + "," + n.srcY0.toFixed(1) +
+          " C" + midX.toFixed(1) + "," + n.srcY0.toFixed(1) +
+          " " + midX.toFixed(1) + "," + n.destY0.toFixed(1) +
+          " " + destX + "," + n.destY0.toFixed(1) +
+          " L" + destX + "," + n.destY1.toFixed(1) +
+          " C" + midX.toFixed(1) + "," + n.destY1.toFixed(1) +
+          " " + midX.toFixed(1) + "," + n.srcY1.toFixed(1) +
+          " " + (srcX + nodeW) + "," + n.srcY1.toFixed(1) +
+          " Z";
+        var pct = ((n.d.value / total) * 100).toFixed(1);
+        var title = n.d.label + ": " + formatMoney(n.d.value, prefix) + " (" + pct + "%)";
+        return (
+          '<path class="sankey-ribbon" d="' + d + '" fill="' + n.color + '"><title>' +
+          escapeHtml(title) + "</title></path>"
+        );
+      })
+      .join("");
+
+    var destNodes = nodes
+      .map(function (n) {
+        return (
+          '<rect class="sankey-dest-node" x="' + destX + '" y="' + n.destY0.toFixed(1) +
+          '" width="' + nodeW + '" height="' + Math.max(n.destY1 - n.destY0, 1).toFixed(1) +
+          '" fill="' + n.color + '"></rect>'
+        );
+      })
+      .join("");
+
+    var sourceNode =
+      '<rect class="sankey-source-node" x="' + srcX + '" y="' + padTop +
+      '" width="' + nodeW + '" height="' + H + '"></rect>';
+
+    el.innerHTML =
+      '<svg class="sankey" viewBox="0 0 ' + width + " " + height +
+      '" role="img" aria-label="Flow diagram of 2025 HOA dues spending by category; full figures are in the legend and table below.">' +
+      ribbons + sourceNode + destNodes + "</svg>";
+
+    if (legend) {
+      legend.innerHTML = "";
+      nodes.forEach(function (n) {
+        var pct = ((n.d.value / total) * 100).toFixed(1);
+        var li = document.createElement("li");
+        var swatch = document.createElement("span");
+        swatch.className = "swatch";
+        swatch.style.background = n.color;
+        var labelSpan = document.createElement("span");
+        labelSpan.className = "legend-label";
+        labelSpan.textContent = n.d.label;
+        var valueSpan = document.createElement("span");
+        valueSpan.className = "legend-value";
+        valueSpan.textContent = formatMoney(n.d.value, prefix) + " · " + pct + "%";
+        li.appendChild(swatch);
+        li.appendChild(labelSpan);
+        li.appendChild(valueSpan);
+        legend.appendChild(li);
+      });
+    }
+
+    if (table) {
+      var rows = data
+        .map(function (d) {
+          var pct = ((d.value / total) * 100).toFixed(1);
+          return (
+            "<tr><td>" + escapeHtml(d.label) + "</td><td>" +
+            formatMoney(d.value, prefix) + "</td><td>" + pct + "%</td></tr>"
+          );
+        })
+        .join("");
+      table.innerHTML =
+        "<thead><tr><th>Category</th><th>Amount</th><th>Share</th></tr></thead><tbody>" +
+        rows + "</tbody>";
+    }
+  }
 
   function renderStackedBar(barId, legendId, tableId, data, prefix) {
     var bar = document.getElementById(barId);

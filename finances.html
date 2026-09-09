@@ -86,7 +86,8 @@
       </p>
 
       <div class="chart-card">
-        <div class="stacked-bar" id="dues-bar"></div>
+        <p class="sankey-caption" id="dues-sankey-caption"></p>
+        <div class="sankey-wrap" id="dues-sankey"></div>
         <ul class="chart-legend" id="dues-legend"></ul>
         <details class="chart-table-toggle">
           <summary>View as a table</summary>
@@ -107,18 +108,18 @@
 
       <div class="kpi-row">
         <div class="stat-tile">
-          <div class="stat-label">Management costs removed</div>
-          <div class="stat-value">$8,415<span style="font-size:1rem;">/yr</span></div>
+          <div class="stat-label">Management costs removed, per year</div>
+          <div class="stat-value">$8,415</div>
           <div class="stat-sub">Management fees, management extra &amp; tech suite</div>
         </div>
         <div class="stat-tile">
-          <div class="stat-label">Resident portal added</div>
-          <div class="stat-value">$2,400<span style="font-size:1rem;">/yr</span></div>
+          <div class="stat-label">Resident portal added, per year</div>
+          <div class="stat-value">$2,400</div>
           <div class="stat-sub">PayHOA, estimated at ~$200/month</div>
         </div>
         <div class="stat-tile">
-          <div class="stat-label">↓ Estimated net savings</div>
-          <div class="stat-value good">$6,015<span style="font-size:1rem;">/yr</span></div>
+          <div class="stat-label">↓ Estimated net savings, per year</div>
+          <div class="stat-value good">$6,015</div>
           <div class="stat-sub">≈ $4.40/unit/month, before any other budget changes</div>
         </div>
       </div>
@@ -142,6 +143,30 @@
         Association never has to lean on loans or special assessments for
         them.
       </p>
+
+      <div class="finance-disclosure corrections">
+        <p><strong>Two corrections applied below, versus the source documents:</strong></p>
+        <ul>
+          <li>
+            <strong>Fountain removed.</strong> A $500 fountain system appeared
+            as a reserve component in both the working reserve workbook and
+            the professional Reserve Study &mdash; the Association does not
+            own it. It's excluded from every total and chart on this page.
+          </li>
+          <li>
+            <strong>Interest rate vs. inflation rate.</strong> The
+            professional Reserve Study assumes a 3% annual inflation rate for
+            future replacement costs, but only a 0.25% annual return on
+            invested reserve funds &mdash; a rate that low means the reserve
+            fund loses real purchasing power over time even while its dollar
+            balance grows. The study itself calls 0.25% conservative rather
+            than a current-market rate. The chart below instead uses the
+            Board's own workbook assumption of a 3% return, matching the
+            inflation rate &mdash; which is why it reaches full funding
+            faster than the professional study's own number would project.
+          </li>
+        </ul>
+      </div>
 
       <div class="kpi-row">
         <div class="stat-tile">
@@ -175,10 +200,8 @@
       <div class="chart-card">
         <h3>What your reserve fund covers</h3>
         <p class="chart-caption">
-          Share of total reserve replacement cost by component. Adjusted to
-          remove a fountain system the Association does not own, which
-          appeared in error in both the working reserve workbook and the
-          professional Reserve Study.
+          Share of total reserve replacement cost by component (fountain
+          excluded &mdash; see correction note above).
         </p>
         <div class="stacked-bar" id="reserve-bar"></div>
         <ul class="chart-legend" id="reserve-legend"></ul>
@@ -188,15 +211,6 @@
         </details>
       </div>
 
-      <p class="chart-caption" style="margin-top: 1.25rem;">
-        One additional correction: the professional Reserve Study assumes
-        just a 0.25% annual return on invested reserve funds when projecting
-        future interest earned &mdash; it says plainly that this is a
-        conservative placeholder, not a current-market rate. The chart above
-        uses the Board's own workbook, which assumes a more realistic 3%
-        return; either way, this only affects how fast the balance grows
-        between now and full funding, not the total amount needed.
-      </p>
     </div>
   </section>
 </main>
