@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ARC Request — Villas at Worthington HOA</title>
+<meta name="description" content="Submit an architectural change request to the Villas at Worthington Homeowners Association Board.">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <a class="site-title" href="index.html">
+      <img class="site-logo" src="assets/img/logo-header.jpg" alt="Villas at Worthington">
+    </a>
+    <button class="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false">&#9776;</button>
+    <nav class="site-nav" aria-label="Primary">
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="documents.html">Documents</a></li>
+        <li><a href="arc-request.html" aria-current="page">ARC Request</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="page-header">
+    <div class="container">
+      <h1>Architectural Change Request</h1>
+      <p class="lede">
+        Submit this form to the Board before beginning any exterior
+        construction, alteration, or modification.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="notice-box">
+        <p>
+          Per Declaration &sect;9.2.1, the Board will approve, reject, or
+          modify your request in writing within 30 days of a complete
+          submission — if you do not receive a written response within that
+          time, the request is deemed approved. Work must still comply with
+          the <a href="documents.html">Design Guidelines</a> and all
+          applicable City of North Royalton codes and permits.
+        </p>
+      </div>
+
+      <form id="arc-form" class="arc-form" novalidate>
+        <fieldset>
+          <legend>Owner &amp; Property Information</legend>
+
+          <div class="form-row two-col">
+            <div class="field">
+              <label class="field-label" for="ownerName">Owner Name(s) <span class="required-mark">*</span></label>
+              <input type="text" id="ownerName" name="ownerName" required>
+            </div>
+            <div class="field">
+              <label class="field-label" for="lot">Lot #</label>
+              <input type="text" id="lot" name="lot">
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="field-label" for="propertyAddress">Property Address <span class="required-mark">*</span></label>
+            <input type="text" id="propertyAddress" name="propertyAddress" required>
+          </div>
+
+          <div class="form-row two-col">
+            <div class="field">
+              <label class="field-label" for="phone">Phone</label>
+              <input type="tel" id="phone" name="phone">
+            </div>
+            <div class="field">
+              <label class="field-label" for="email">Email <span class="required-mark">*</span></label>
+              <input type="email" id="email" name="email" required>
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="field-label" for="mailingAddress">Mailing Address (if different)</label>
+            <input type="text" id="mailingAddress" name="mailingAddress">
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Type of Request</legend>
+          <div class="checkbox-grid">
+            <label class="checkbox-item"><input type="checkbox" name="requestType" value="addition" data-label="Addition / porch"> Addition / porch</label>
+            <label class="checkbox-item"><input type="checkbox" name="requestType" value="patio" data-label="Patio / deck"> Patio / deck</label>
+            <label class="checkbox-item"><input type="checkbox" name="requestType" value="fence" data-label="Fence"> Fence</label>
+            <label class="checkbox-item"><input type="checkbox" name="requestType" value="shed" data-label="Shed / outbuilding"> Shed / outbuilding</label>
+            <label class="checkbox-item"><input type="checkbox" name="requestType" value="pool" data-label="Pool / spa"> Pool / spa</label>
+            <label class="checkbox-item"><input type="checkbox" name="requestType" value="driveway" data-label="Driveway / walkway"> Driveway / walkway</label>
+            <label class="checkbox-item"><input type="checkbox" name="requestType" value="paint" data-label="Exterior paint / siding"> Exterior paint / siding</label>
+            <label class="checkbox-item"><input type="checkbox" name="requestType" value="roof" data-label="Roof"> Roof</label>
+            <label class="checkbox-item"><input type="checkbox" name="requestType" value="solar" data-label="Solar panels"> Solar panels</label>
+            <label class="checkbox-item"><input type="checkbox" name="requestType" value="landscaping" data-label="Landscaping"> Landscaping</label>
+            <label class="checkbox-item"><input type="checkbox" name="requestType" value="awning" data-label="Awning"> Awning</label>
+          </div>
+          <div class="field other-request">
+            <label class="field-label" for="requestTypeOther">Other</label>
+            <input type="text" id="requestTypeOther" name="requestTypeOther" placeholder="Describe if not listed above">
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Description of Proposed Work</legend>
+          <div class="field">
+            <label class="field-label" for="description">
+              Describe the work, including dimensions, materials, and colors <span class="required-mark">*</span>
+            </label>
+            <textarea id="description" name="description" required></textarea>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Contractor Information (if applicable)</legend>
+          <div class="form-row two-col">
+            <div class="field">
+              <label class="field-label" for="contractorName">Contractor Name</label>
+              <input type="text" id="contractorName" name="contractorName">
+            </div>
+            <div class="field">
+              <label class="field-label" for="contractorLicensed">License / Insurance on File?</label>
+              <select id="contractorLicensed" name="contractorLicensed">
+                <option value=""></option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+                <option value="N/A">N/A</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row two-col">
+            <div class="field">
+              <label class="field-label" for="startDate">Estimated Start Date</label>
+              <input type="date" id="startDate" name="startDate">
+            </div>
+            <div class="field">
+              <label class="field-label" for="endDate">Estimated Completion Date</label>
+              <input type="date" id="endDate" name="endDate">
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Required Attachments</legend>
+          <p class="help-text">
+            This form can't attach files for you. Check off what applies,
+            then attach the files yourself in the email this form opens for
+            you.
+          </p>
+          <div class="checkbox-grid">
+            <label class="checkbox-item"><input type="checkbox" name="attachments" value="site-plan" data-label="Site plan or plot plan showing the location of the proposed work"> Site plan or plot plan showing the location of the proposed work</label>
+            <label class="checkbox-item"><input type="checkbox" name="attachments" value="drawings" data-label="Detailed drawings, specifications, or product sheets"> Detailed drawings, specifications, or product sheets</label>
+            <label class="checkbox-item"><input type="checkbox" name="attachments" value="samples" data-label="Material and color samples"> Material and color samples</label>
+            <label class="checkbox-item"><input type="checkbox" name="attachments" value="photos" data-label="Photos of the existing condition"> Photos of the existing condition</label>
+            <label class="checkbox-item"><input type="checkbox" name="attachments" value="insurance" data-label="Contractor's certificate of insurance (if applicable)"> Contractor's certificate of insurance (if applicable)</label>
+            <label class="checkbox-item"><input type="checkbox" name="attachments" value="permit" data-label="Copy of City of North Royalton permit (if required)"> Copy of City of North Royalton permit (if required)</label>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Owner Certification</legend>
+          <label class="checkbox-item certification">
+            <input type="checkbox" name="certify" required>
+            I have reviewed the Design Guidelines and Declaration provisions
+            applicable to this request and agree to complete the work as
+            described above. I understand that unapproved work, or work that
+            does not match the approved request, may be subject to
+            enforcement under the Association's Rules &amp; Regulations.
+          </label>
+
+          <div class="form-row two-col" style="margin-top: 1.1rem;">
+            <div class="field">
+              <label class="field-label" for="signatureName">Typed Name (serves as signature) <span class="required-mark">*</span></label>
+              <input type="text" id="signatureName" name="signatureName" required>
+            </div>
+            <div class="field">
+              <label class="field-label" for="signatureDate">Date</label>
+              <input type="date" id="signatureDate" name="signatureDate">
+            </div>
+          </div>
+        </fieldset>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">Prepare Email to the Board</button>
+          <p class="help-text">
+            This site has no backend, so "submit" opens your own email app
+            with the request above filled in and addressed to
+            board@villasofworthingtonhoa.com. Nothing is sent until you
+            review it and click Send there.
+          </p>
+          <p class="form-status" id="arc-form-status" hidden></p>
+        </div>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <span>&copy; <span id="year"></span> Villas at Worthington Homeowners Association, Inc.</span>
+    <span>North Royalton, Ohio</span>
+  </div>
+</footer>
+
+<script src="assets/js/nav.js"></script>
+<script src="assets/js/arc-form.js"></script>
+<script>document.getElementById("year").textContent = new Date().getFullYear();</script>
+</body>
+</html>

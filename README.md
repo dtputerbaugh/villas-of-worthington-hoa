@@ -12,6 +12,7 @@ paid hosting required. This guide assumes no coding experience.
 ├── index.html          Home page
 ├── about.html           About page (board, self-management)
 ├── documents.html        Documents page (list of PDFs)
+├── arc-request.html      Architectural change request form
 ├── contact.html          Contact page
 ├── documents/
 │   ├── documents.json     The list that documents.html reads
@@ -21,7 +22,8 @@ paid hosting required. This guide assumes no coding experience.
 │   └── Rules-and-Regulations.pdf
 ├── assets/
 │   ├── css/style.css      All page styling
-│   └── js/                Small scripts (mobile menu, document list)
+│   ├── img/                Logo images
+│   └── js/                Small scripts (mobile menu, document list, ARC form)
 └── README.md            This file
 ```
 
@@ -104,6 +106,25 @@ This site also works unchanged on Cloudflare Pages, if the Association
 ever prefers that instead of GitHub Pages: connect the repository, leave
 the **build output directory** as the repository root (`/`), and leave the
 build command empty (there's nothing to build).
+
+## How the ARC Request form works
+
+`arc-request.html` is a fillable version of the Architectural Change
+Request form. This site has no backend and nowhere to send form data to,
+so clicking "Prepare Email to the Board" doesn't transmit anything itself —
+it builds a plain-text summary of the answers and opens the visitor's own
+email app with that summary filled in, addressed to
+`board@villasofworthingtonhoa.com`. The visitor still has to review it,
+attach any files, and click Send themselves.
+
+- The board email address is set once, near the top of
+  `assets/js/arc-form.js` (`BOARD_EMAIL`). If that address ever changes,
+  update it there **and** on `contact.html`.
+- The checkbox lists (type of request, attachments) and the mailto message
+  format live in the same file if the form's fields ever need to change.
+- Because this relies on the visitor's own email app, it won't work for
+  someone without one configured on their device — the direct email
+  address on the Contact page is the fallback for that case.
 
 ## Editing existing pages (officers, contact info, etc.)
 
