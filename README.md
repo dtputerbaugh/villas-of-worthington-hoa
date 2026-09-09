@@ -74,13 +74,6 @@ Delete its `{ ... }` block from `documents/documents.json`. You can leave
 the PDF file in the `documents/` folder if you might want it again later —
 only documents listed in `documents.json` show up on the page.
 
-### The "Reserve Study — Not yet posted" entry
-
-The Documents page currently lists "Reserve Study (most recent)" with no
-file attached, so it shows as "Not yet posted" instead of a broken link.
-Once you have a Reserve Study PDF, follow the steps above and set that
-entry's `"file"` to the PDF's filename.
-
 ## Deploying changes
 
 This site deploys automatically via **GitHub Actions**: any change pushed
