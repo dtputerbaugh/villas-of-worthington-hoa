@@ -194,8 +194,8 @@ img {
 }
 
 .hero-image {
-  flex: 0 0 13rem;
-  max-width: 13rem;
+  flex: 1 1 16rem;
+  max-width: 22rem;
 }
 
 .hero-image img {
@@ -205,12 +205,13 @@ img {
 
 @media (max-width: 800px) {
   .hero .container {
-    flex-direction: column-reverse;
-    align-items: center;
+    flex-direction: column;
   }
 
+  /* The small header logo is enough on mobile -- this larger image was
+     dominating the screen before any real content showed. */
   .hero-image {
-    max-width: 9.5rem;
+    display: none;
   }
 }
 
@@ -373,6 +374,20 @@ img {
   border-bottom: 1px solid var(--line);
 }
 
+@media (max-width: 560px) {
+  /* Always stack, regardless of how short the title/note happen to be --
+     letting flex-wrap decide made short entries sit side-by-side with the
+     button while longer ones stacked, which read as broken alignment. */
+  .doc-item {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .doc-item .btn {
+    align-self: flex-start;
+  }
+}
+
 .doc-info h3 {
   margin: 0 0 0.2rem;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
@@ -395,6 +410,21 @@ img {
 .doc-list-error {
   color: var(--ink-soft);
   padding: 1.25rem 0;
+}
+
+.doc-list-empty {
+  list-style: none;
+  border: 1px dashed var(--line);
+  border-radius: var(--radius);
+  background: var(--paper-alt);
+  color: var(--ink-soft);
+  padding: 1.5rem 1.75rem;
+  margin-top: 1rem;
+  line-height: 1.6;
+}
+
+.doc-list-empty strong {
+  color: var(--ink);
 }
 
 /* ---- Contact -------------------------------------------------------------- */
@@ -600,4 +630,251 @@ img {
 
 .form-status[hidden] {
   display: none;
+}
+
+/* ---- Finances: stat tiles, KPI rows, charts -----------------------------
+   Categorical series colors are the dataviz skill's validated default
+   palette (8 fixed hue slots, assigned in order, never cycled/recolored
+   per-chart). Kept as its own block since these hexes are pinned by the
+   CVD/contrast validation, not the site's warm theme. */
+
+:root {
+  --series-1: #2a78d6; /* blue */
+  --series-2: #eb6834; /* orange */
+  --series-3: #1baf7a; /* aqua */
+  --series-4: #eda100; /* yellow */
+  --series-5: #e87ba4; /* magenta */
+  --series-6: #008300; /* green */
+  --series-7: #4a3aa7; /* violet */
+  --status-good: #0ca30c;
+}
+
+.finance-disclosure {
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--accent-line);
+  border-radius: var(--radius);
+  background: #fff;
+  padding: 1.25rem 1.5rem;
+  margin-top: 1.5rem;
+  color: var(--ink-soft);
+  font-size: 0.92rem;
+}
+
+.finance-disclosure p:last-child {
+  margin-bottom: 0;
+}
+
+.kpi-row {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  margin-top: 1.5rem;
+}
+
+.stat-tile {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #fff;
+  padding: 1.1rem 1.25rem;
+}
+
+.stat-tile .stat-label {
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+  margin-bottom: 0.3rem;
+}
+
+.stat-tile .stat-value {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--ink);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  line-height: 1.15;
+}
+
+.stat-tile .stat-value.good {
+  color: var(--status-good);
+}
+
+.stat-tile .stat-sub {
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+  margin-top: 0.3rem;
+}
+
+.chart-card {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #fff;
+  padding: 1.5rem 1.75rem;
+  margin-top: 1.75rem;
+}
+
+.chart-card h3 {
+  margin-top: 0;
+}
+
+.chart-caption {
+  font-size: 0.88rem;
+  color: var(--ink-soft);
+  margin-top: -0.4rem;
+  margin-bottom: 1.25rem;
+}
+
+/* Stacked bar (part-to-whole) */
+
+.stacked-bar {
+  display: flex;
+  width: 100%;
+  height: 40px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--paper-alt);
+}
+
+.stacked-bar .bar-segment {
+  height: 100%;
+  border-right: 2px solid #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.stacked-bar .bar-segment:last-child {
+  border-right: none;
+}
+
+.stacked-bar .bar-segment .segment-label {
+  color: #fff;
+  font-size: 0.78rem;
+  font-weight: 600;
+  white-space: nowrap;
+  padding: 0 0.4rem;
+}
+
+.chart-legend {
+  list-style: none;
+  margin: 1.25rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.55rem;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+}
+
+.chart-legend li {
+  display: flex;
+  align-items: baseline;
+  gap: 0.55rem;
+  font-size: 0.9rem;
+}
+
+.chart-legend .swatch {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  flex-shrink: 0;
+  transform: translateY(1px);
+}
+
+.chart-legend .legend-label {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.chart-legend .legend-value {
+  color: var(--ink-soft);
+  font-size: 0.85rem;
+}
+
+/* Line chart */
+
+.line-chart-wrap {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.line-chart-wrap svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.line-chart text {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  fill: var(--ink-soft);
+}
+
+.line-chart .grid-line {
+  stroke: var(--line);
+  stroke-width: 1;
+}
+
+.line-chart .ref-line {
+  stroke: var(--ink-soft);
+  stroke-width: 1;
+  stroke-dasharray: 4 4;
+}
+
+.line-chart .area-fill {
+  fill: var(--series-1);
+  opacity: 0.1;
+}
+
+.line-chart .trend-line {
+  fill: none;
+  stroke: var(--series-1);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.line-chart .end-dot {
+  fill: var(--series-1);
+  stroke: #fff;
+  stroke-width: 2;
+}
+
+@media (max-width: 560px) {
+  .stacked-bar .bar-segment .segment-label {
+    display: none;
+  }
+}
+
+.chart-table-toggle {
+  margin-top: 1rem;
+}
+
+.chart-table-toggle summary {
+  cursor: pointer;
+  font-size: 0.85rem;
+  color: var(--accent-dark);
+}
+
+.chart-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 0.75rem;
+  font-size: 0.9rem;
+}
+
+.chart-table th,
+.chart-table td {
+  text-align: left;
+  padding: 0.45rem 0.6rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.chart-table th {
+  color: var(--ink-soft);
+  font-weight: 600;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.chart-table td:nth-child(2),
+.chart-table td:nth-child(3) {
+  font-variant-numeric: tabular-nums;
 }

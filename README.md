@@ -13,6 +13,8 @@ paid hosting required. This guide assumes no coding experience.
 ├── about.html           About page (board, self-management)
 ├── documents.html        Documents page (list of PDFs)
 ├── arc-request.html      Architectural change request form
+├── finances.html         Dues, self-managed outlook & reserve fund charts
+├── minutes.html          Meeting minutes (placeholder until posted)
 ├── contact.html          Contact page
 ├── documents/
 │   ├── documents.json     The list that documents.html reads
@@ -21,11 +23,16 @@ paid hosting required. This guide assumes no coding experience.
 │   ├── Design-Guidelines.pdf
 │   ├── Rules-and-Regulations.pdf
 │   ├── Community-Map.pdf
-│   └── Maintenance-Map.pdf
+│   ├── Maintenance-Map.pdf
+│   ├── Reserve-Study-2025.pdf
+│   └── Reserve-Study-2016.pdf
+├── minutes/
+│   └── minutes.json       The list that minutes.html reads (starts empty)
 ├── assets/
 │   ├── css/style.css      All page styling
 │   ├── img/                Logo images
-│   └── js/                Small scripts (mobile menu, document list, ARC form)
+│   └── js/                Small scripts (mobile menu, document list,
+│                           minutes list, ARC form, finance charts)
 └── README.md            This file
 ```
 
@@ -78,6 +85,24 @@ Delete its `{ ... }` block from `documents/documents.json`. You can leave
 the PDF file in the `documents/` folder if you might want it again later —
 only documents listed in `documents.json` show up on the page.
 
+## Adding meeting minutes
+
+Same pattern as documents, one folder over: drop the PDF into `minutes/`
+and add one entry to `minutes/minutes.json` — e.g.
+
+```json
+{
+  "title": "September 2026 Board Meeting",
+  "file": "2026-09-Minutes.pdf",
+  "note": "Approved October 2026"
+}
+```
+
+`minutes/minutes.json` starts as an empty list (`[]`), which is why the
+Minutes page currently shows a "work in progress" notice instead of a
+list — that notice disappears on its own once the file has at least one
+entry.
+
 ## Deploying changes
 
 This site deploys automatically via **GitHub Actions**: any change pushed
@@ -128,19 +153,43 @@ attach any files, and click Send themselves.
   someone without one configured on their device — the direct email
   address on the Contact page is the fallback for that case.
 
+## Updating the Finances page
+
+Unlike Documents and Minutes, `finances.html` is **not** driven by a JSON
+file — the dollar figures and the chart data both live directly in the
+page and in `assets/js/finances.js`, because updating them (a new year's
+actuals, a new Reserve Study) means someone is deliberately revising the
+numbers, not just dropping in a new file.
+
+- The three stacked-bar/line charts are drawn by `assets/js/finances.js` —
+  each dataset is a small array at the top of the file (`duesBreakdown`,
+  `reserveAllocation`, `pctFunded`), with a comment above each explaining
+  where its numbers came from. Change the numbers there; the bars, legends,
+  and the "View as a table" tables all regenerate from the same array.
+- The stat tiles (the boxed numbers like "$400" or "Fully Funded") are
+  plain text in `finances.html` — edit them directly.
+- When a new Reserve Study or a finalized self-managed budget is adopted,
+  update both the figures here and the sourcing note in the page's
+  disclosure box at the top, so it stays clear these are current
+  best-estimate planning figures rather than final audited numbers.
+
 ## Editing existing pages (officers, contact info, etc.)
 
-For text that isn't in `documents.json` — like the officer names on
-`about.html`, the resident portal link on `index.html`, or the mailing
-address on `contact.html` — open the relevant `.html` file in GitHub,
-click the pencil/edit icon, and change the text directly. Look for
-`<!-- TODO ... -->` comments in the files — those mark the couple of spots
-still waiting on real information:
+For text that isn't in a JSON file — like the officer names on
+`about.html` or the resident portal link on `index.html` — open the
+relevant `.html` file in GitHub, click the pencil/edit icon, and change
+the text directly. Look for `<!-- TODO ... -->` comments in the files —
+each one marks a spot still waiting on real information:
 
 - **Home page:** the "Resident Portal (PayHOA)" button needs its real link
   once it's available.
-- **Contact page:** the mailing address is a placeholder until the Board
-  supplies one.
+
+The Contact page's mailing-address text ("official mail goes to the
+current Board President's address on file, confirmed by emailing the
+Board") is meant to stand as-is rather than as a placeholder — it avoids
+publishing a board member's home address while still telling residents
+how to reach the Association by mail. Change it only if the Board adopts
+a different mailing address (e.g., a PO box).
 
 ## Previewing changes before you commit (optional, for anyone comfortable
 with a terminal)

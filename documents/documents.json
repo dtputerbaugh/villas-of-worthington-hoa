@@ -28,5 +28,15 @@
     "title": "Maintenance Map",
     "file": "Maintenance-Map.pdf",
     "note": "Shows which areas the Association maintains (and how often) versus owner-maintained areas."
+  },
+  {
+    "title": "Reserve Study (2025)",
+    "file": "Reserve-Study-2025.pdf",
+    "note": "Full Reserve Study, effective August 2025, prepared by CRS. See the Finances page for a plain-language summary."
+  },
+  {
+    "title": "Reserve Study (2016, historical)",
+    "file": "Reserve-Study-2016.pdf",
+    "note": "Prior Reserve Study, kept for historical reference."
   }
 ]
