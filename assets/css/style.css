@@ -813,39 +813,46 @@ img {
 }
 
 .chart-legend li {
-  display: flex;
-  align-items: baseline;
-  gap: 0.55rem;
+  display: grid;
+  grid-template-columns: 12px 1fr;
+  column-gap: 0.55rem;
+  row-gap: 0.15rem;
   font-size: 0.9rem;
 }
 
 .chart-legend .swatch {
-  display: inline-block;
+  grid-column: 1;
+  grid-row: 1 / 3;
   width: 12px;
   height: 12px;
   border-radius: 3px;
-  flex-shrink: 0;
-  transform: translateY(1px);
+  margin-top: 0.3rem;
 }
 
 .chart-legend .legend-label {
+  grid-column: 2;
+  grid-row: 1;
   color: var(--ink);
   font-weight: 600;
 }
 
 .chart-legend .legend-value {
+  grid-column: 2;
+  grid-row: 2;
   color: var(--ink-soft);
   font-size: 0.85rem;
+  font-variant-numeric: tabular-nums;
 }
 
 /* Toggle group (e.g. HOA Total vs. Per Homeowner) */
 
 .toggle-group {
-  display: inline-flex;
+  display: flex;
+  width: fit-content;
   border: 1px solid var(--line);
   border-radius: 999px;
   overflow: hidden;
-  margin-bottom: 1.25rem;
+  margin: 0 auto 1.25rem;
 }
 
 .toggle-btn {
