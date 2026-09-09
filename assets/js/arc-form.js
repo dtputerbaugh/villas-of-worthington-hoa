@@ -74,7 +74,7 @@ document.addEventListener("DOMContentLoaded", function () {
     lines.push("Typed Name (serves as signature): " + v("signatureName"));
     lines.push("Date: " + v("signatureDate"));
 
-    var subjectAddress = v("propertyAddress") || v("ownerName") || "Villas at Worthington";
+    var subjectAddress = v("propertyAddress") || v("ownerName") || "Villas of Worthington";
     var subject = "ARC Request — " + subjectAddress;
     var body = lines.join("\n");
 

@@ -1,6 +1,6 @@
-# Villas at Worthington HOA website
+# Villas of Worthington HOA website
 
-This repository is the entire public website for the Villas at
+This repository is the entire public website for the Villas of
 Worthington Homeowners Association (North Royalton, Ohio). It's plain
 HTML, CSS, and a little JavaScript — no build tools, no frameworks, and no
 paid hosting required. This guide assumes no coding experience.
