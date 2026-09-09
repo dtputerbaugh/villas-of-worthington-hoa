@@ -41,12 +41,14 @@
 
       <div class="finance-disclosure">
         <p>
-          <strong>These are planning figures, not audited financial
-          statements.</strong> The breakdowns below come from the Board's
-          2025 actual spending, the Association's 2025 professional Reserve
-          Study, and the Board's own reserve-funding workbook. Self-managed
-          cost estimates are current best estimates ahead of a full year of
-          actuals. The full Reserve Study is available on the
+          <strong>These are the Association's actual financial figures, not
+          a formal audit.</strong> The breakdowns below come from the
+          Association's actual 2019&ndash;2025 year-end financial statements
+          and 2026 year-to-date report (prepared by Associated Property
+          Management), plus the 2025 professional Reserve Study and the
+          Board's own reserve-funding workbook. Self-managed cost estimates
+          are current best estimates ahead of a full year of actuals. The
+          full Reserve Study is available on the
           <a href="documents.html">Documents page</a>; ask the
           <a href="contact.html">Board</a> for anything not covered here.
         </p>
@@ -59,14 +61,14 @@
           <div class="stat-sub">$33.33/month, unchanged since 2020</div>
         </div>
         <div class="stat-tile">
-          <div class="stat-label">2025 operating spend</div>
-          <div class="stat-value">$44,305</div>
-          <div class="stat-sub">vs. $45,600 assessment income</div>
+          <div class="stat-label">2025 total spending</div>
+          <div class="stat-value">$45,872</div>
+          <div class="stat-sub">vs. $45,600 in dues &mdash; the small gap came from other income</div>
         </div>
         <div class="stat-tile">
           <div class="stat-label">Reserve fund balance</div>
-          <div class="stat-value">$69,404</div>
-          <div class="stat-sub">Jan 2025, unaudited</div>
+          <div class="stat-value">$89,238</div>
+          <div class="stat-sub">June 30, 2026, bank-reconciled &mdash; up from $69,404 at the start of 2025</div>
         </div>
         <div class="stat-tile">
           <div class="stat-label">Units</div>
@@ -99,6 +101,38 @@
         <details class="chart-table-toggle">
           <summary>View as a table</summary>
           <table class="chart-table" id="dues-table"></table>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2>Spending over time</h2>
+      <p>
+        Seven years of the Association's actual year-end spending, rolled up
+        into three categories. Landscaping and grounds contracts have
+        trended down; 2024 was pushed higher than any other year by a legal
+        fee spike (a $6,911 year, versus a typical $2,000&ndash;$3,600) plus
+        an extra, one-time catch-up payment into reserves on top of the
+        year's regular contribution; 2025 is back down to a more typical
+        total, close to 2020&ndash;2023 levels. 2026 isn't shown &mdash;
+        it's a partial year in progress, not yet comparable.
+      </p>
+
+      <div class="chart-card">
+        <h3>Actual spending by category, 2019&ndash;2025</h3>
+        <p class="chart-caption">
+          Landscaping &amp; grounds covers lawn care, pond and trail
+          maintenance, and snow removal. Admin, insurance &amp; utilities
+          covers management fees, legal and accounting, insurance,
+          electricity and water/sewer, and other administrative costs.
+        </p>
+        <div class="bar-chart-wrap" id="spending-trend-chart"></div>
+        <ul class="chart-legend" id="spending-trend-legend"></ul>
+        <details class="chart-table-toggle">
+          <summary>View as a table</summary>
+          <table class="chart-table" id="spending-trend-table"></table>
         </details>
       </div>
     </div>
@@ -148,7 +182,10 @@
         The reserve fund pays for major shared-property replacements (ponds,
         the paved trail, mailboxes, fencing, entry features) so the
         Association never has to lean on loans or special assessments for
-        them.
+        them. Annual dues stay flat at $400/unit in 2026 &mdash; what's
+        changing is how much of that same amount goes toward reserves
+        versus day-to-day operating costs, now that self-management has
+        freed up room in the budget.
       </p>
 
       <div class="kpi-row">
@@ -158,14 +195,14 @@
           <div class="stat-sub">Per the 2025 Reserve Study's cash-flow method</div>
         </div>
         <div class="stat-tile">
-          <div class="stat-label">2026 recommended contribution</div>
+          <div class="stat-label">Going into reserves, 2026</div>
           <div class="stat-value">$10,238</div>
-          <div class="stat-sub">Up from $4,762 in 2025</div>
+          <div class="stat-sub">&asymp; $7.48/unit/month &mdash; the same $400/year dues, redirected, not a new cost</div>
         </div>
         <div class="stat-tile">
-          <div class="stat-label">Total replacement cost</div>
+          <div class="stat-label">Full replacement cost, all components</div>
           <div class="stat-value">$187,260</div>
-          <div class="stat-sub">All reserve components combined</div>
+          <div class="stat-sub">Spread across 15&ndash;30+ years of component lifespans &mdash; not due at once</div>
         </div>
       </div>
 
@@ -178,16 +215,24 @@
           step-ups).
         </p>
         <div class="line-chart-wrap" id="pct-funded-chart"></div>
+        <p class="chart-caption" style="margin-top: 1rem; margin-bottom: 0;">
+          The actual reserve balance is running ahead of this projection:
+          the Reserve Study projected $74,345 by the end of 2025 and
+          $83,236 by the end of 2026 &mdash; the Association actually ended
+          2025 at $78,099, and had already passed the full 2026 target,
+          reaching $89,238, six months early (as of June 30, 2026).
+        </p>
       </div>
 
       <div class="chart-card">
-        <h3>Anticipated reserve expenditures, 2025&ndash;2039</h3>
+        <h3>Anticipated reserve expenditures by category, 2025&ndash;2039</h3>
         <p class="chart-caption">
-          Dollar amount of planned reserve spending by year, from the 2025
-          Reserve Study's component schedule &mdash; most years are quiet,
-          with occasional larger planned replacements.
+          Dollar amount of planned reserve spending by year and component,
+          from the 2025 Reserve Study's component schedule &mdash; most
+          years are quiet, with occasional larger planned replacements.
         </p>
         <div class="bar-chart-wrap" id="expenditures-chart"></div>
+        <ul class="chart-legend" id="expenditures-legend"></ul>
         <details class="chart-table-toggle">
           <summary>View as a table</summary>
           <table class="chart-table" id="expenditures-table"></table>
@@ -216,7 +261,7 @@
       </div>
 
       <div class="finance-disclosure quiet">
-        <p><strong>Two corrections applied above, versus the source documents:</strong></p>
+        <p><strong>Notes on the figures above, versus the source documents:</strong></p>
         <ul>
           <li>
             <strong>Fountain removed.</strong> A $500 fountain system appeared
@@ -231,11 +276,44 @@
             invested reserve funds &mdash; a rate that low means the reserve
             fund loses real purchasing power over time even while its dollar
             balance grows. The study itself calls 0.25% conservative rather
-            than a current-market rate. The percent-funded chart above
-            instead uses the Board's own workbook assumption of a 3% return,
-            matching the inflation rate &mdash; which is why it reaches full
-            funding faster than the professional study's own number would
-            project.
+            than a current-market rate. In practice, the actual blended rate
+            has been better than that: as of mid-2026 about $51,000 of the
+            reserve fund sits in a 12-month CD earning roughly 3.4% APY,
+            alongside a money-market account earning about 0.15% APY. The
+            percent-funded chart above uses the Board's own workbook
+            assumption of a 3% return, matching the inflation rate &mdash;
+            which is why it reaches full funding faster than the
+            professional study's own, more conservative number would project.
+          </li>
+          <li>
+            <strong>Dues breakdown updated to actual figures.</strong> The
+            "Where your HOA dues go" chart previously used preliminary 2025
+            estimates (roughly $44,305 total). It now reflects the
+            Association's actual, complete 2025 financial statements
+            ($45,872 total) &mdash; category amounts shifted modestly as a
+            result, most notably landscaping/grounds (up about $880) and
+            administrative costs (up about $510).
+          </li>
+          <li>
+            <strong>Reserve expenditure schedule corrected.</strong> The
+            "Anticipated reserve expenditures" chart above has been checked
+            directly against the 2025 Reserve Study's own component-by-
+            component schedule. A few years in an earlier version of this
+            chart were wrong: 2027 and 2032 showed amounts that were
+            entirely the excluded fountain line and should have been $0;
+            2033 and 2038 showed amounts that don't exist in the study at
+            all; and 2036 (a $2,076 entry-feature replacement) was missing
+            entirely. All are corrected above.
+          </li>
+          <li>
+            <strong>An uncollected receivable affects 2025's net income.</strong>
+            $9,460 of 2025's income is a "Worthington HOA Shared Income"
+            receivable that was still uncollected as of the Association's
+            most recent financial statement (June 30, 2026, unchanged from
+            year-end 2025). It's counted in the Association's 2025 net
+            income on paper, but it isn't cash in hand yet &mdash; on a
+            cash basis, 2025 would show a much smaller surplus. The Board is
+            tracking its collection.
           </li>
         </ul>
       </div>

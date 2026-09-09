@@ -161,12 +161,18 @@ page and in `assets/js/finances.js`, because updating them (a new year's
 actuals, a new Reserve Study) means someone is deliberately revising the
 numbers, not just dropping in a new file.
 
-- The three charts (a flow diagram, a stacked bar, and a line chart) are
-  drawn by `assets/js/finances.js` — each dataset is a small array at the
-  top of the file (`duesBreakdown`, `reserveAllocation`, `pctFunded`), with
-  a comment above each explaining where its numbers came from. Change the
-  numbers there; the diagrams, legends, and the "View as a table" tables
-  all regenerate from the same array.
+- The charts (a flow diagram, two stacked-by-category year-bar charts, a
+  stacked bar, and a line chart) are drawn by `assets/js/finances.js` —
+  each dataset is a small array near the top of the file (`duesBreakdown`,
+  `spendingTrend`, `reserveAllocation`, `reserveExpenditures`, `pctFunded`),
+  with a comment above each explaining where its numbers came from. Change
+  the numbers there; the diagrams, legends, and the "View as a table"
+  tables all regenerate from the same array. `spendingTrend` and
+  `reserveExpenditures` use a small array of `{ cat, value }` items per
+  year rather than a single number, so each year's bar can be split and
+  color-coded by category — `TREND_CATEGORIES` and `RESERVE_CATEGORIES`
+  (just above each dataset) list the categories in the fixed order that
+  sets their color.
 - The stat tiles (the boxed numbers like "$400" or "Fully Funded") are
   plain text in `finances.html` — edit them directly.
 - When a new Reserve Study or a finalized self-managed budget is adopted,

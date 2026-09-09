@@ -1,6 +1,10 @@
-// Renders the two stacked-bar charts and the reserve-funding line chart on
-// the Finances page. Figures and sourcing are documented in finances.html
-// next to each chart; this file only draws them.
+// Renders the charts on the Finances page. Figures and sourcing are
+// documented in finances.html next to each chart; this file only draws
+// them. All dollar figures below are sourced from the Association's actual
+// year-end financial statements (2019-2025) and 2026 year-to-date report,
+// prepared by Associated Property Management (APM), plus the 2025 Reserve
+// Study -- not budget estimates. See the disclosure note at the bottom of
+// the page for corrections made against earlier, less complete figures.
 document.addEventListener("DOMContentLoaded", function () {
   var SERIES = [
     "var(--series-1)",
@@ -15,27 +19,44 @@ document.addEventListener("DOMContentLoaded", function () {
   var UNIT_COUNT = 114;
 
   // 2025 actual operating spending, grouped into resident-readable
-  // categories, plus the small surplus the Association didn't spend.
-  // Source: Board's 2025 actuals (from the 2026 budget analysis).
-  // Spending categories total $44,305; the unspent line brings the total
-  // up to the full $45,600 in 2025 assessment income -- $400.00 per unit
-  // exactly, which is what makes the "per homeowner" toggle add up clean.
+  // categories. Source: the Association's actual full-year 2025 Budget
+  // Comparison Report (APM). Total spending ($45,872) slightly exceeded
+  // 2025 assessment income ($45,600) -- covered by the year's other small
+  // income (late fees, a legal-fee reimbursement, interest), not by an
+  // unspent surplus, so there's no "retained" category this time.
   var duesBreakdown = [
-    { label: "Landscaping, grounds & snow", short: "Landscaping & grounds", value: 16618 },
+    { label: "Landscaping, grounds & snow", short: "Landscaping & grounds", value: 17499 },
     { label: "Reserve contribution", short: "Reserve contribution", value: 10207 },
-    { label: "Management (2025, being phased out)", short: "Management (2025)", value: 7800 },
+    { label: "Management (2025, being phased out)", short: "Management (2025)", value: 7975 },
     { label: "Legal & professional", short: "Legal & professional", value: 3215 },
     { label: "Insurance", short: "Insurance", value: 2525 },
-    { label: "Administrative & other", short: "Admin & other", value: 2221 },
+    { label: "Administrative & other", short: "Admin & other", value: 2731 },
     { label: "Utilities", short: "Utilities", value: 1719 },
-    { label: "Unspent (retained)", short: "Unspent (retained)", value: 1295, neutral: true },
+  ];
+
+  // 2019-2025 actual full-year spending, rolled into 3 categories so the
+  // trend reads cleanly. Source: the Association's year-end Budget
+  // Comparison Reports (APM), 2019 through 2025. 2026 is excluded -- it's
+  // only a partial year (through June) so far.
+  var TREND_CATEGORIES = ["Landscaping & grounds", "Reserve contribution", "Admin, insurance & utilities"];
+  var spendingTrend = [
+    { year: 2019, items: [{ cat: "Landscaping & grounds", value: 29120 }, { cat: "Reserve contribution", value: 3319 }, { cat: "Admin, insurance & utilities", value: 15536 }], notable: true },
+    { year: 2020, items: [{ cat: "Landscaping & grounds", value: 26523 }, { cat: "Reserve contribution", value: 4500 }, { cat: "Admin, insurance & utilities", value: 16326 }] },
+    { year: 2021, items: [{ cat: "Landscaping & grounds", value: 23030 }, { cat: "Reserve contribution", value: 4125 }, { cat: "Admin, insurance & utilities", value: 17836 }] },
+    { year: 2022, items: [{ cat: "Landscaping & grounds", value: 25508 }, { cat: "Reserve contribution", value: 4500 }, { cat: "Admin, insurance & utilities", value: 16597 }] },
+    { year: 2023, items: [{ cat: "Landscaping & grounds", value: 24035 }, { cat: "Reserve contribution", value: 4970 }, { cat: "Admin, insurance & utilities", value: 17924 }] },
+    { year: 2024, items: [{ cat: "Landscaping & grounds", value: 16499 }, { cat: "Reserve contribution", value: 19882 }, { cat: "Admin, insurance & utilities", value: 22208 }], notable: true },
+    { year: 2025, items: [{ cat: "Landscaping & grounds", value: 17499 }, { cat: "Reserve contribution", value: 10207 }, { cat: "Admin, insurance & utilities", value: 18166 }], notable: true },
   ];
 
   // Reserve component replacement cost, from the 2025 Reserve Study
   // component inventory -- with the Fountain System ($500) removed; the
   // Association does not own that fountain. (Its removal shifts these
   // percentages by well under half a point; it's excluded on principle,
-  // not because the dollar amount matters here.)
+  // not because the dollar amount matters here.) Category order/colors are
+  // shared with the expenditures-by-year chart below, so the same color
+  // always means the same reserve component on this page.
+  var RESERVE_CATEGORIES = ["Ponds", "Mailbox units", "Paved trail", "Property fencing", "Entry feature & signs", "Reserve study updates"];
   var reserveAllocation = [
     { label: "Ponds", value: 130000 },
     { label: "Mailbox units", value: 21600 },
@@ -59,32 +80,40 @@ document.addEventListener("DOMContentLoaded", function () {
     { year: 2030, pct: 94.2 },
   ];
 
-  // Anticipated reserve expenditures by year, 2025-2039, from the 2025
-  // Reserve Study's 30-year component schedule. Stops at 2039 (the
-  // mailbox replacement) rather than running the full 30 years because
-  // the 2042 pond replacement (~$214,870) would flatten every other
-  // year's bar to near-invisible on the same scale -- it's called out
-  // separately in the page copy instead.
+  // Anticipated reserve expenditures BY CATEGORY, 2025-2039, read directly
+  // off the 2025 Reserve Study's Exhibit B component-by-component schedule
+  // (fountain excluded, per above). This corrects several errors in an
+  // earlier version of this chart: 2027 ($530) and 2032 ($615) were both
+  // entirely the excluded fountain line and should have been $0; 2033 had
+  // no real expenditure ($0, not $633); 2036's $2,076 entry-feature
+  // replacement was missing entirely; 2037 was undercounted by $713; 2038
+  // had no real expenditure ($0, not $2,203); 2039 was $32,672, not
+  // $34,185. Stops at 2039 (the mailbox replacement) rather than running
+  // the full 30 years because the 2042 pond replacement (~$214,870) would
+  // flatten every other year's bar to near-invisible on the same scale --
+  // it's called out separately in the page copy instead.
   var reserveExpenditures = [
-    { year: 2025, value: 0 },
-    { year: 2026, value: 1545 },
-    { year: 2027, value: 530 },
-    { year: 2028, value: 721 },
-    { year: 2029, value: 563 },
-    { year: 2030, value: 0 },
-    { year: 2031, value: 788 },
-    { year: 2032, value: 0 },
-    { year: 2033, value: 633 },
-    { year: 2034, value: 10256, notable: true },
-    { year: 2035, value: 0 },
-    { year: 2036, value: 0 },
-    { year: 2037, value: 941 },
-    { year: 2038, value: 2203 },
-    { year: 2039, value: 34185, notable: true },
+    { year: 2025, items: [] },
+    { year: 2026, items: [{ cat: "Entry feature & signs", value: 1545 }] },
+    { year: 2027, items: [] },
+    { year: 2028, items: [{ cat: "Reserve study updates", value: 721 }] },
+    { year: 2029, items: [{ cat: "Property fencing", value: 563 }] },
+    { year: 2030, items: [] },
+    { year: 2031, items: [{ cat: "Reserve study updates", value: 788 }] },
+    { year: 2032, items: [] },
+    { year: 2033, items: [] },
+    { year: 2034, items: [{ cat: "Property fencing", value: 9394 }, { cat: "Reserve study updates", value: 861 }], notable: true },
+    { year: 2035, items: [] },
+    { year: 2036, items: [{ cat: "Entry feature & signs", value: 2076 }] },
+    { year: 2037, items: [{ cat: "Property fencing", value: 713 }, { cat: "Reserve study updates", value: 941 }] },
+    { year: 2038, items: [] },
+    { year: 2039, items: [{ cat: "Mailbox units", value: 32672 }], notable: true },
   ];
 
   setupDuesSankey();
   renderStackedBar("reserve-bar", "reserve-legend", "reserve-table", reserveAllocation, "$");
+  renderCategoryLegend("expenditures-legend", reserveExpenditures, RESERVE_CATEGORIES, "$");
+  renderCategoryLegend("spending-trend-legend", spendingTrend, TREND_CATEGORIES, "$");
 
   // The line and bar charts below draw their axis/value text at a fixed
   // pixel size *in SVG units*, so if the SVG were a fixed-width viewBox
@@ -96,7 +125,10 @@ document.addEventListener("DOMContentLoaded", function () {
     renderLineChart("pct-funded-chart", pctFunded, w);
   });
   drawResponsive("expenditures-chart", function (w) {
-    renderYearBarChart("expenditures-chart", "expenditures-table", reserveExpenditures, w);
+    renderStackedYearBarChart("expenditures-chart", "expenditures-table", reserveExpenditures, RESERVE_CATEGORIES, "$", w);
+  });
+  drawResponsive("spending-trend-chart", function (w) {
+    renderStackedYearBarChart("spending-trend-chart", "spending-trend-table", spendingTrend, TREND_CATEGORIES, "$", w);
   });
 
   function drawResponsive(containerId, draw) {
@@ -131,12 +163,12 @@ document.addEventListener("DOMContentLoaded", function () {
         });
         renderSankey(
           "dues-sankey", "dues-sankey-caption", "dues-legend", "dues-table",
-          perUnitData, "$", 400, "Per homeowner, 2025", 2
+          perUnitData, "$", null, "Per homeowner, 2025", 2
         );
       } else {
         renderSankey(
           "dues-sankey", "dues-sankey-caption", "dues-legend", "dues-table",
-          duesBreakdown, "$", 45600, "Association-wide, 2025", 0
+          duesBreakdown, "$", null, "Association-wide, 2025", 0
         );
       }
     }
@@ -350,6 +382,48 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
+  // Builds a swatch/label/value legend for a stacked year-bar chart
+  // (renderStackedYearBarChart below), summarizing each category's total
+  // and share across every year shown. A category that never appears in
+  // this particular dataset (e.g. "Ponds" isn't due until 2042, past this
+  // chart's 2039 cutoff) is left out of its legend rather than shown at
+  // $0 · 0.0%.
+  function renderCategoryLegend(legendId, points, categories, prefix) {
+    var legend = document.getElementById(legendId);
+    if (!legend) return;
+
+    var totals = {};
+    var grand = 0;
+    points.forEach(function (p) {
+      p.items.forEach(function (it) {
+        totals[it.cat] = (totals[it.cat] || 0) + it.value;
+        grand += it.value;
+      });
+    });
+
+    legend.innerHTML = "";
+    categories.forEach(function (cat, i) {
+      var val = totals[cat];
+      if (!val) return;
+      var color = SERIES[i % SERIES.length];
+      var pct = grand ? ((val / grand) * 100).toFixed(1) : "0.0";
+      var li = document.createElement("li");
+      var swatch = document.createElement("span");
+      swatch.className = "swatch";
+      swatch.style.background = color;
+      var labelSpan = document.createElement("span");
+      labelSpan.className = "legend-label";
+      labelSpan.textContent = cat;
+      var valueSpan = document.createElement("span");
+      valueSpan.className = "legend-value";
+      valueSpan.textContent = formatMoney(val, prefix) + " · " + pct + "%";
+      li.appendChild(swatch);
+      li.appendChild(labelSpan);
+      li.appendChild(valueSpan);
+      legend.appendChild(li);
+    });
+  }
+
   function escapeHtml(str) {
     var div = document.createElement("div");
     div.textContent = str;
@@ -444,11 +518,13 @@ document.addEventListener("DOMContentLoaded", function () {
       "</svg>";
   }
 
-  // A column-per-year bar chart for a magnitude that's mostly small with
-  // occasional spikes (reserve expenditures). Direct-labels only the
-  // notable (tallest) bars per the "label the extreme, not every point"
-  // rule -- the rest are covered by the table view and a hover title.
-  function renderYearBarChart(containerId, tableId, points, width) {
+  // A stacked column-per-year chart: each year's bar is split into
+  // segments by category (using the same category order/colors as this
+  // page's other charts), for a magnitude that's mostly small with
+  // occasional spikes. Only the tallest/most notable bars get a direct
+  // total label per the "label the extreme, not every point" rule -- the
+  // rest are covered by the table view and a per-segment hover title.
+  function renderStackedYearBarChart(containerId, tableId, points, categories, prefix, width) {
     var el = document.getElementById(containerId);
     var table = document.getElementById(tableId);
     if (!el) return;
@@ -462,11 +538,16 @@ document.addEventListener("DOMContentLoaded", function () {
     var plotW = width - padLeft - padRight;
     var plotH = height - padTop - padBottom;
 
-    var maxVal = Math.max.apply(null, points.map(function (p) { return p.value; }));
-    var niceMax = Math.ceil((maxVal * 1.15) / 10000) * 10000 || 10000;
+    function totalOf(p) {
+      return p.items.reduce(function (sum, it) { return sum + it.value; }, 0);
+    }
+
+    var maxVal = Math.max.apply(null, points.map(totalOf));
+    var step = maxVal > 20000 ? 10000 : 1000;
+    var niceMax = Math.ceil((maxVal * 1.15) / step) * step || step;
 
     var slot = plotW / points.length;
-    var barW = Math.min(24, slot * 0.6);
+    var barW = Math.min(28, slot * 0.6);
 
     function y(v) {
       return padTop + plotH - (v / niceMax) * plotH;
@@ -490,27 +571,38 @@ document.addEventListener("DOMContentLoaded", function () {
       .map(function (p, i) {
         var cx = padLeft + slot * i + slot / 2;
         var barX = cx - barW / 2;
-        var barY = y(p.value);
-        var barH = Math.max(padTop + plotH - barY, p.value > 0 ? 2 : 0);
-        var cls = "year-bar" + (p.notable ? " is-notable" : "");
-        var title = p.year + ": " + formatMoney(p.value, "$");
+        var total = totalOf(p);
+        var cum = 0;
+        var rx = p.items.length <= 1 ? 3 : 0;
+        var segs = p.items
+          .map(function (it) {
+            var catIndex = categories.indexOf(it.cat);
+            var color = SERIES[Math.max(catIndex, 0) % SERIES.length];
+            var y0 = y(cum);
+            var y1 = y(cum + it.value);
+            cum += it.value;
+            var h = Math.max(y0 - y1, it.value > 0 ? 1 : 0);
+            var title = p.year + " — " + it.cat + ": " + formatMoney(it.value, prefix);
+            return (
+              '<rect class="stack-seg" x="' + barX.toFixed(1) + '" y="' + y1.toFixed(1) +
+              '" width="' + barW.toFixed(1) + '" height="' + h.toFixed(1) + '" rx="' + rx +
+              '" style="fill:' + color + '"><title>' + escapeHtml(title) + "</title></rect>"
+            );
+          })
+          .join("");
         var label = p.notable
-          ? '<text class="bar-value-label" x="' + cx.toFixed(1) + '" y="' + (barY - 8).toFixed(1) +
-            '" text-anchor="middle" font-size="11">' + formatMoney(p.value, "$") + "</text>"
+          ? '<text class="bar-value-label" x="' + cx.toFixed(1) + '" y="' + (y(total) - 8).toFixed(1) +
+            '" text-anchor="middle" font-size="11">' + formatMoney(total, prefix) + "</text>"
           : "";
-        return (
-          '<rect class="' + cls + '" x="' + barX.toFixed(1) + '" y="' + barY.toFixed(1) +
-          '" width="' + barW.toFixed(1) + '" height="' + barH.toFixed(1) + '" rx="3"><title>' +
-          escapeHtml(title) + "</title></rect>" + label
-        );
+        return segs + label;
       })
       .join("");
 
-    // At narrow widths there isn't room for a 4-digit label under every
-    // bar. Always keep the first, last, and any notable/labeled bars;
-    // fill in additional evenly-spaced labels only where they don't
-    // collide with those (rather than a plain "every Nth" step, which
-    // can still land a regular label right next to a notable one).
+    // At narrow widths there isn't room for a label under every bar.
+    // Always keep the first, last, and any notable/labeled bars; fill in
+    // additional evenly-spaced labels only where they don't collide with
+    // those (rather than a plain "every Nth" step, which can still land a
+    // regular label right next to a notable one).
     var minLabelSlot = 26;
     var cxOf = function (i) { return padLeft + slot * i + slot / 2; };
     var shown = {};
@@ -547,18 +639,32 @@ document.addEventListener("DOMContentLoaded", function () {
 
     el.innerHTML =
       '<svg class="year-bar-chart" viewBox="0 0 ' + width + " " + height +
-      '" role="img" aria-label="Anticipated reserve expenditures by year, 2025 through 2039; full figures are in the table below.">' +
+      '" role="img" aria-label="Stacked bar chart by year and category; full figures are in the legend and table below.">' +
       gridLines + baseline + bars + xLabels + "</svg>";
 
     if (table) {
+      var used = categories.filter(function (c) {
+        return points.some(function (p) {
+          return p.items.some(function (it) { return it.cat === c && it.value; });
+        });
+      });
+      var header =
+        "<tr><th>Year</th>" +
+        used.map(function (c) { return "<th>" + escapeHtml(c) + "</th>"; }).join("") +
+        "<th>Total</th></tr>";
       var rows = points
         .map(function (p) {
-          return "<tr><td>" + p.year + "</td><td>" + formatMoney(p.value, "$") + "</td></tr>";
+          var byCat = {};
+          p.items.forEach(function (it) { byCat[it.cat] = it.value; });
+          var cells = used
+            .map(function (c) {
+              return "<td>" + (byCat[c] ? formatMoney(byCat[c], prefix) : "—") + "</td>";
+            })
+            .join("");
+          return "<tr><td>" + p.year + "</td>" + cells + "<td>" + formatMoney(totalOf(p), prefix) + "</td></tr>";
         })
         .join("");
-      table.innerHTML =
-        "<thead><tr><th>Year</th><th>Anticipated Expenditure</th></tr></thead><tbody>" +
-        rows + "</tbody>";
+      table.innerHTML = "<thead>" + header + "</thead><tbody>" + rows + "</tbody>";
     }
   }
 
