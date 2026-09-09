@@ -59,9 +59,63 @@ document.addEventListener("DOMContentLoaded", function () {
     { year: 2030, pct: 94.2 },
   ];
 
+  // Anticipated reserve expenditures by year, 2025-2039, from the 2025
+  // Reserve Study's 30-year component schedule. Stops at 2039 (the
+  // mailbox replacement) rather than running the full 30 years because
+  // the 2042 pond replacement (~$214,870) would flatten every other
+  // year's bar to near-invisible on the same scale -- it's called out
+  // separately in the page copy instead.
+  var reserveExpenditures = [
+    { year: 2025, value: 0 },
+    { year: 2026, value: 1545 },
+    { year: 2027, value: 530 },
+    { year: 2028, value: 721 },
+    { year: 2029, value: 563 },
+    { year: 2030, value: 0 },
+    { year: 2031, value: 788 },
+    { year: 2032, value: 0 },
+    { year: 2033, value: 633 },
+    { year: 2034, value: 10256, notable: true },
+    { year: 2035, value: 0 },
+    { year: 2036, value: 0 },
+    { year: 2037, value: 941 },
+    { year: 2038, value: 2203 },
+    { year: 2039, value: 34185, notable: true },
+  ];
+
   setupDuesSankey();
   renderStackedBar("reserve-bar", "reserve-legend", "reserve-table", reserveAllocation, "$");
-  renderLineChart("pct-funded-chart", pctFunded);
+
+  // The line and bar charts below draw their axis/value text at a fixed
+  // pixel size *in SVG units*, so if the SVG were a fixed-width viewBox
+  // stretched to fit a narrow phone via CSS, that text would shrink right
+  // along with it -- fine on desktop, close to unreadable on mobile.
+  // Measuring the real container width and redrawing at that exact pixel
+  // width keeps every label at its designed size on any screen.
+  drawResponsive("pct-funded-chart", function (w) {
+    renderLineChart("pct-funded-chart", pctFunded, w);
+  });
+  drawResponsive("expenditures-chart", function (w) {
+    renderYearBarChart("expenditures-chart", "expenditures-table", reserveExpenditures, w);
+  });
+
+  function drawResponsive(containerId, draw) {
+    var el = document.getElementById(containerId);
+    if (!el) return;
+    var lastWidth = 0;
+    function redraw() {
+      var w = Math.round(el.clientWidth);
+      if (!w || Math.abs(w - lastWidth) < 8) return;
+      lastWidth = w;
+      draw(w);
+    }
+    redraw();
+    var resizeTimer;
+    window.addEventListener("resize", function () {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(redraw, 150);
+    });
+  }
 
   // Wires up the HOA Total / Per Homeowner toggle above the dues Sankey,
   // then draws it in whichever mode is currently active.
@@ -124,7 +178,7 @@ document.addEventListener("DOMContentLoaded", function () {
       caption.textContent = sourceLabel + " — " + formatMoney(total, prefix, decimals) + " total";
     }
 
-    var width = 340;
+    var width = 560;
     var height = 220;
     var padTop = 14;
     var padBottom = 14;
@@ -132,7 +186,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     var srcX = 14;
     var nodeW = 14;
-    var destX = 300;
+    var destX = 520;
     var midX = (srcX + nodeW + destX) / 2;
 
     var gap = 6;
@@ -302,11 +356,11 @@ document.addEventListener("DOMContentLoaded", function () {
     return div.innerHTML;
   }
 
-  function renderLineChart(containerId, points) {
+  function renderLineChart(containerId, points, width) {
     var el = document.getElementById(containerId);
     if (!el) return;
 
-    var width = 640;
+    width = width || 640;
     var height = 260;
     var padLeft = 44;
     var padRight = 16;
@@ -388,6 +442,129 @@ document.addEventListener("DOMContentLoaded", function () {
       endLabel +
       xLabels +
       "</svg>";
+  }
+
+  // A column-per-year bar chart for a magnitude that's mostly small with
+  // occasional spikes (reserve expenditures). Direct-labels only the
+  // notable (tallest) bars per the "label the extreme, not every point"
+  // rule -- the rest are covered by the table view and a hover title.
+  function renderYearBarChart(containerId, tableId, points, width) {
+    var el = document.getElementById(containerId);
+    var table = document.getElementById(tableId);
+    if (!el) return;
+
+    width = width || 640;
+    var height = 260;
+    var padLeft = 50;
+    var padRight = 16;
+    var padTop = 36;
+    var padBottom = 32;
+    var plotW = width - padLeft - padRight;
+    var plotH = height - padTop - padBottom;
+
+    var maxVal = Math.max.apply(null, points.map(function (p) { return p.value; }));
+    var niceMax = Math.ceil((maxVal * 1.15) / 10000) * 10000 || 10000;
+
+    var slot = plotW / points.length;
+    var barW = Math.min(24, slot * 0.6);
+
+    function y(v) {
+      return padTop + plotH - (v / niceMax) * plotH;
+    }
+
+    var ticks = [];
+    for (var t = 0; t <= niceMax; t += niceMax / 4) ticks.push(t);
+
+    var gridLines = ticks
+      .map(function (v) {
+        return (
+          '<line class="grid-line" x1="' + padLeft + '" x2="' + (width - padRight) +
+          '" y1="' + y(v).toFixed(1) + '" y2="' + y(v).toFixed(1) + '"></line>' +
+          '<text x="' + (padLeft - 8) + '" y="' + y(v).toFixed(1) + '" text-anchor="end" dominant-baseline="middle" font-size="11">' +
+          formatCompactMoney(v) + "</text>"
+        );
+      })
+      .join("");
+
+    var bars = points
+      .map(function (p, i) {
+        var cx = padLeft + slot * i + slot / 2;
+        var barX = cx - barW / 2;
+        var barY = y(p.value);
+        var barH = Math.max(padTop + plotH - barY, p.value > 0 ? 2 : 0);
+        var cls = "year-bar" + (p.notable ? " is-notable" : "");
+        var title = p.year + ": " + formatMoney(p.value, "$");
+        var label = p.notable
+          ? '<text class="bar-value-label" x="' + cx.toFixed(1) + '" y="' + (barY - 8).toFixed(1) +
+            '" text-anchor="middle" font-size="11">' + formatMoney(p.value, "$") + "</text>"
+          : "";
+        return (
+          '<rect class="' + cls + '" x="' + barX.toFixed(1) + '" y="' + barY.toFixed(1) +
+          '" width="' + barW.toFixed(1) + '" height="' + barH.toFixed(1) + '" rx="3"><title>' +
+          escapeHtml(title) + "</title></rect>" + label
+        );
+      })
+      .join("");
+
+    // At narrow widths there isn't room for a 4-digit label under every
+    // bar. Always keep the first, last, and any notable/labeled bars;
+    // fill in additional evenly-spaced labels only where they don't
+    // collide with those (rather than a plain "every Nth" step, which
+    // can still land a regular label right next to a notable one).
+    var minLabelSlot = 26;
+    var cxOf = function (i) { return padLeft + slot * i + slot / 2; };
+    var shown = {};
+    var shownX = [];
+    points.forEach(function (p, i) {
+      if (i === 0 || i === points.length - 1 || p.notable) {
+        shown[i] = true;
+        shownX.push(cxOf(i));
+      }
+    });
+    points.forEach(function (p, i) {
+      if (shown[i]) return;
+      var cx = cxOf(i);
+      var collides = shownX.some(function (x) { return Math.abs(x - cx) < minLabelSlot; });
+      if (!collides) {
+        shown[i] = true;
+        shownX.push(cx);
+      }
+    });
+
+    var xLabels = points
+      .map(function (p, i) {
+        if (!shown[i]) return "";
+        return (
+          '<text x="' + cxOf(i).toFixed(1) + '" y="' + (height - padBottom + 18) +
+          '" text-anchor="middle" font-size="10.5">' + p.year + "</text>"
+        );
+      })
+      .join("");
+
+    var baseline =
+      '<line class="baseline" x1="' + padLeft + '" x2="' + (width - padRight) +
+      '" y1="' + y(0).toFixed(1) + '" y2="' + y(0).toFixed(1) + '"></line>';
+
+    el.innerHTML =
+      '<svg class="year-bar-chart" viewBox="0 0 ' + width + " " + height +
+      '" role="img" aria-label="Anticipated reserve expenditures by year, 2025 through 2039; full figures are in the table below.">' +
+      gridLines + baseline + bars + xLabels + "</svg>";
+
+    if (table) {
+      var rows = points
+        .map(function (p) {
+          return "<tr><td>" + p.year + "</td><td>" + formatMoney(p.value, "$") + "</td></tr>";
+        })
+        .join("");
+      table.innerHTML =
+        "<thead><tr><th>Year</th><th>Anticipated Expenditure</th></tr></thead><tbody>" +
+        rows + "</tbody>";
+    }
+  }
+
+  function formatCompactMoney(n) {
+    if (n === 0) return "$0";
+    return "$" + (n / 1000).toLocaleString("en-US") + "K";
   }
 
   function formatMoney(n, prefix, decimals) {

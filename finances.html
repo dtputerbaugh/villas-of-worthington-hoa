@@ -151,30 +151,6 @@
         them.
       </p>
 
-      <div class="finance-disclosure corrections">
-        <p><strong>Two corrections applied below, versus the source documents:</strong></p>
-        <ul>
-          <li>
-            <strong>Fountain removed.</strong> A $500 fountain system appeared
-            as a reserve component in both the working reserve workbook and
-            the professional Reserve Study &mdash; the Association does not
-            own it. It's excluded from every total and chart on this page.
-          </li>
-          <li>
-            <strong>Interest rate vs. inflation rate.</strong> The
-            professional Reserve Study assumes a 3% annual inflation rate for
-            future replacement costs, but only a 0.25% annual return on
-            invested reserve funds &mdash; a rate that low means the reserve
-            fund loses real purchasing power over time even while its dollar
-            balance grows. The study itself calls 0.25% conservative rather
-            than a current-market rate. The chart below instead uses the
-            Board's own workbook assumption of a 3% return, matching the
-            inflation rate &mdash; which is why it reaches full funding
-            faster than the professional study's own number would project.
-          </li>
-        </ul>
-      </div>
-
       <div class="kpi-row">
         <div class="stat-tile">
           <div class="stat-label">Reserve status</div>
@@ -205,10 +181,31 @@
       </div>
 
       <div class="chart-card">
+        <h3>Anticipated reserve expenditures, 2025&ndash;2039</h3>
+        <p class="chart-caption">
+          Dollar amount of planned reserve spending by year, from the 2025
+          Reserve Study's component schedule &mdash; most years are quiet,
+          with occasional larger planned replacements.
+        </p>
+        <div class="bar-chart-wrap" id="expenditures-chart"></div>
+        <details class="chart-table-toggle">
+          <summary>View as a table</summary>
+          <table class="chart-table" id="expenditures-table"></table>
+        </details>
+        <p class="chart-caption" style="margin-top: 1rem; margin-bottom: 0;">
+          Beyond 2039, the single largest planned expense is the pond system
+          replacement, estimated at roughly $214,870 in 2042 &mdash; the
+          Association's largest reserve component by far. It's excluded from
+          the chart above so it doesn't flatten every other year's bar to
+          near-invisible.
+        </p>
+      </div>
+
+      <div class="chart-card">
         <h3>What your reserve fund covers</h3>
         <p class="chart-caption">
           Share of total reserve replacement cost by component (fountain
-          excluded &mdash; see correction note above).
+          excluded &mdash; see note below).
         </p>
         <div class="stacked-bar" id="reserve-bar"></div>
         <ul class="chart-legend" id="reserve-legend"></ul>
@@ -216,6 +213,31 @@
           <summary>View as a table</summary>
           <table class="chart-table" id="reserve-table"></table>
         </details>
+      </div>
+
+      <div class="finance-disclosure quiet">
+        <p><strong>Two corrections applied above, versus the source documents:</strong></p>
+        <ul>
+          <li>
+            <strong>Fountain removed.</strong> A $500 fountain system appeared
+            as a reserve component in both the working reserve workbook and
+            the professional Reserve Study &mdash; the Association does not
+            own it. It's excluded from every total and chart on this page.
+          </li>
+          <li>
+            <strong>Interest rate vs. inflation rate.</strong> The
+            professional Reserve Study assumes a 3% annual inflation rate for
+            future replacement costs, but only a 0.25% annual return on
+            invested reserve funds &mdash; a rate that low means the reserve
+            fund loses real purchasing power over time even while its dollar
+            balance grows. The study itself calls 0.25% conservative rather
+            than a current-market rate. The percent-funded chart above
+            instead uses the Board's own workbook assumption of a 3% return,
+            matching the inflation rate &mdash; which is why it reaches full
+            funding faster than the professional study's own number would
+            project.
+          </li>
+        </ul>
       </div>
 
     </div>
