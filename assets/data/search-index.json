@@ -2677,42 +2677,6 @@
 "file": "New-Homeowner-Welcome-Packet.pdf",
 "category": "For New Homeowners",
 "section": "",
-"heading": "What's in this packet",
-"text": "\u2022 The community and the Association, in brief \u2022",
-"page": 1
-},
-{
-"doc": "New Homeowner Welcome Packet",
-"file": "New-Homeowner-Welcome-Packet.pdf",
-"category": "For New Homeowners",
-"section": "",
-"heading": "Dues",
-"text": "and how to pay them \u2022 How the Board works, and how to reach it \u2022",
-"page": 1
-},
-{
-"doc": "New Homeowner Welcome Packet",
-"file": "New-Homeowner-Welcome-Packet.pdf",
-"category": "For New Homeowners",
-"section": "",
-"heading": "Architectural review (ARC)",
-"text": "\u2014 what needs approval and how to ask \u2022 A quick-reference summary of the most-asked-about Rules & Regulations \u2022",
-"page": 1
-},
-{
-"doc": "New Homeowner Welcome Packet",
-"file": "New-Homeowner-Welcome-Packet.pdf",
-"category": "For New Homeowners",
-"section": "",
-"heading": "Insurance",
-"text": "\u2014 what the Association covers, and what's on you \u2022 The reserve fund, in one paragraph \u2022",
-"page": 1
-},
-{
-"doc": "New Homeowner Welcome Packet",
-"file": "New-Homeowner-Welcome-Packet.pdf",
-"category": "For New Homeowners",
-"section": "",
 "heading": "The community, in brief",
 "text": "Villas of Worthington is a 114-unit planned community (PUD) in North Royalton, Cuyahoga County, Ohio, established in 2007. The Association \u2014 Villas at Worthington Homeowners Association, Inc., an Ohio nonprofit corporation \u2014 is self-managed by an elected, all-volunteer Board of Directors rather than an outside management company.",
 "page": 1
@@ -2723,16 +2687,7 @@
 "category": "For New Homeowners",
 "section": "",
 "heading": "Dues",
-"text": "Annual dues are $400 per unit ($33.33/month), unchanged since 2020. Pay assessments and manage your account through the Resident Portal (PayHOA), linked from the homepage.",
-"page": 1
-},
-{
-"doc": "New Homeowner Welcome Packet",
-"file": "New-Homeowner-Welcome-Packet.pdf",
-"category": "For New Homeowners",
-"section": "",
-"heading": "The Board",
-"text": "'s email doesn't have access to individual account balances \u2014 PayHOA is the place for that.",
+"text": "Annual dues are $400 per unit ($33.33/month), unchanged since 2020. Pay assessments and manage your account through the Resident Portal (PayHOA), linked from the homepage \u2014 it's the fastest, self-service way to check your balance or pay.",
 "page": 1
 },
 {
@@ -2759,34 +2714,16 @@
 "category": "For New Homeowners",
 "section": "",
 "heading": "Quick rules reference",
-"text": "Summarized from the Rules & Regulations, adopted by the Board in 2026. The Rules themselves cite the exact Declaration section behind each one \u2014 see that document for full text and any exceptions. Pets \u2014 ordinary household pets (dogs, cats, caged birds) are fine; no livestock, poultry, or commercial breeding. Leash or otherwise control pets outside your lot, and clean up after them. Parking \u2014 RVs, trailers, boats, and campers stay in garages, with a 72-hour driveway exception for active loading/cleaning. No junk or unregistered vehicles outside a garage; no parking on lawns or common areas. Trash & recycling \u2014 containers stay out of public view except on collection day; curb placement no earlier than the evening before, back to storage by end of collection day. No outdoor burning. Noise \u2014 keep it considerate, especially 10 p.m.\u20138 a.m. Holiday decorations \u2014 welcome, but remove within 45 days of the holiday; keep lighting/sound considerate and clear of sidewalks. Leasing \u2014 whole-unit leases only, subject to all governing documents; owners remain responsible for tenants and must give the Association contact info for any lease or sale. Common areas & open space \u2014 ponds, wetlands, and preservation easements stay in natural condition; no dumping, clearing, or altering the surface-water/drainage system.",
-"page": 2
+"text": "Summarized from the Rules & Regulations, adopted by the Board in 2026 \u2014 which cite the exact Declaration section behind each one; see that document for full text. Pets \u2014 ordinary household pets (dogs, cats, caged birds) are fine; no livestock, poultry, or commercial breeding. Leash or otherwise control pets outside your lot, and clean up after them. Parking \u2014 RVs, trailers, boats, and campers stay in garages, with a 72-hour driveway exception for active loading/cleaning. No junk or unregistered vehicles outside a garage; no parking on lawns or common areas. Trash & recycling \u2014 containers stay out of public view except on collection day; curb placement no earlier than the evening before, back to storage by end of collection day. No outdoor burning. Leasing \u2014 whole-unit leases only, subject to all governing documents; owners remain responsible for tenants and must give the Association contact info for any lease or sale. Common areas & open space \u2014 ponds, wetlands, and preservation easements stay in natural condition; no dumping, clearing, or altering the surface-water/drainage system.",
+"page": 1
 },
 {
 "doc": "New Homeowner Welcome Packet",
 "file": "New-Homeowner-Welcome-Packet.pdf",
 "category": "For New Homeowners",
 "section": "",
-"heading": "Insurance",
-"text": "The Association carries liability, crime, and common-area property coverage through State Farm \u2014 see the",
-"page": 2
-},
-{
-"doc": "New Homeowner Welcome Packet",
-"file": "New-Homeowner-Welcome-Packet.pdf",
-"category": "For New Homeowners",
-"section": "",
-"heading": "Insurance",
-"text": "Summary on the Documents page for the coverage types and limits. Importantly, the Association's policy does not insure individual dwellings: as in most single-family PUDs (unlike a condominium), each owner is responsible for their own homeowner's insurance covering their unit's structure, contents, and personal liability.",
-"page": 2
-},
-{
-"doc": "New Homeowner Welcome Packet",
-"file": "New-Homeowner-Welcome-Packet.pdf",
-"category": "For New Homeowners",
-"section": "",
-"heading": "The reserve fund, briefly",
-"text": "A professionally studied reserve fund pays for major shared-property replacements (ponds, the paved trail, mailboxes, fencing, entry features) so those costs are planned for in advance rather than surprising anyone. The Finances page has the full picture: current balance, funding plan, and historical spending.",
+"heading": "Insurance & the reserve fund",
+"text": "The Association carries liability, crime, and common-area property coverage \u2014 see the Insurance Summary (Documents page) for types and limits. Importantly, that coverage does not insure individual dwellings: as in most single-family PUDs (unlike a condominium), each owner needs their own homeowner's policy for their unit's structure, contents, and personal liability. Separately, a professionally studied reserve fund pays for major shared-property replacements (ponds, the paved trail, mailboxes, fencing, entry features) \u2014 see the Finances page for the current balance and funding plan.",
 "page": 2
 },
 {
@@ -2795,26 +2732,8 @@
 "category": "For New Homeowners",
 "section": "",
 "heading": "Where everything else lives",
-"text": "This packet summarizes the highlights \u2014 you don't need to separately download anything it already covers unless you want the full legal text. Beyond that: \u2022 Documents page \u2014 the full Declaration, Bylaws, Rules & Regulations, Design Guidelines, community maps, Reserve Study, this packet, and the",
+"text": "This packet summarizes the highlights \u2014 no need to separately download anything it already covers. Beyond that: Documents has the full Declaration, Bylaws, Rules & Regulations, Design Guidelines, maps, Reserve Study, and Insurance Summary (with a search box); Minutes has approved Board meeting minutes; Finances has dues, spending history, and reserve detail; Contact has the Board's email, mailing address, and what to reach out about. Questions this packet doesn't answer? Email the Board at board@villasofworthingtonhoa.com.",
 "page": 2
-},
-{
-"doc": "New Homeowner Welcome Packet",
-"file": "New-Homeowner-Welcome-Packet.pdf",
-"category": "For New Homeowners",
-"section": "",
-"heading": "Insurance",
-"text": "Summary. \u2022 Minutes page \u2014 approved Board meeting minutes. \u2022 Finances page \u2014 dues, spending history, reserve fund detail. \u2022 Contact page \u2014 the Board's email, mailing address, and what to reach out about. Questions this packet doesn't answer? Email the Board at board@villasofworthingtonhoa.com.",
-"page": 2
-},
-{
-"doc": "Insurance Summary",
-"file": "Insurance-Summary.pdf",
-"category": "Insurance",
-"section": "",
-"heading": "Carrier",
-"text": "State Farm Fire and Casualty Company, through agent Winkelmann Ins Agcy Inc \u2014 (330) 764-4702.",
-"page": 1
 },
 {
 "doc": "Insurance Summary",
@@ -2822,7 +2741,7 @@
 "category": "Insurance",
 "section": "",
 "heading": "What the Association's policies cover",
-"text": "The Association's coverage is carried across two linked State Farm \u201cResidential Community Association\u201d policies (covering different common-area locations within the community) plus a separate crime bond. Each Residential Community Association policy carries the liability limits below; see \u201cWhat it doesn't cover\u201d for the property side. Coverage Limit (each policy, unless noted) General/Business Liability $2,000,000 per occurrence General Aggregate $4,000,000 Products/Completed Operations Aggregate $4,000,000 Medical Expenses (any one person) $5,000 Damage to Premises Rented to You $300,000 Directors & Officers Liability $2,000,000 per occurrence / $2,000,000 aggregate Employee Dishonesty (Crime) $25,000 Computer Equipment (Inland Marine) $10,000 Loss of Income & Extra Expense $10,000 In addition, a separate Fidelity Bond covers the Association against theft or dishonesty by anyone who handles Association funds, at a $55,000 limit.",
+"text": "The Association's coverage is carried across two linked \u201cResidential Community Association\u201d policies (covering different common-area locations within the community) plus a separate crime bond. Each Residential Community Association policy carries the liability limits below; see \u201cWhat it doesn't cover\u201d for the property side. Coverage Limit (each policy, unless noted) General/Business Liability $2,000,000 per occurrence General Aggregate $4,000,000 Products/Completed Operations Aggregate $4,000,000 Medical Expenses (any one person) $5,000 Damage to Premises Rented to You $300,000 Directors & Officers Liability $2,000,000 per occurrence / $2,000,000 aggregate Employee Dishonesty (Crime) $25,000 Computer Equipment (Inland Marine) $10,000 Loss of Income & Extra Expense $10,000 In addition, a separate Fidelity Bond covers the Association against theft or dishonesty by anyone who handles Association funds, at a $55,000 limit.",
 "page": 1
 },
 {
