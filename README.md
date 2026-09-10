@@ -18,6 +18,7 @@ paid hosting required. This guide assumes no coding experience.
 ├── contact.html          Contact page
 ├── documents/
 │   ├── documents.json     The list that documents.html reads
+│   ├── New-Homeowner-Welcome-Packet.pdf
 │   ├── Declaration.pdf
 │   ├── Bylaws.pdf
 │   ├── Design-Guidelines.pdf
@@ -25,14 +26,21 @@ paid hosting required. This guide assumes no coding experience.
 │   ├── Community-Map.pdf
 │   ├── Maintenance-Map.pdf
 │   ├── Reserve-Study-2025.pdf
-│   └── Reserve-Study-2016.pdf
+│   ├── Reserve-Study-2016.pdf
+│   ├── Insurance-Summary.pdf
+│   └── Certificate-of-Continued-Existence-2023.pdf
 ├── minutes/
-│   └── minutes.json       The list that minutes.html reads (starts empty)
+│   └── minutes.json       The list that minutes.html reads
 ├── assets/
 │   ├── css/style.css      All page styling
 │   ├── img/                Logo images
+│   ├── data/
+│   │   └── search-index.json  Pre-built text index for the Documents
+│   │                           page search box (see "Rebuilding the
+│   │                           document search index" below)
 │   └── js/                Small scripts (mobile menu, document list,
-│                           minutes list, ARC form, finance charts)
+│                           document search, minutes list, ARC form,
+│                           finance charts)
 └── README.md            This file
 ```
 
@@ -84,6 +92,25 @@ it, or use a new filename), and if you used a new filename, update the
 Delete its `{ ... }` block from `documents/documents.json`. You can leave
 the PDF file in the `documents/` folder if you might want it again later —
 only documents listed in `documents.json` show up on the page.
+
+### Rebuilding the document search index
+
+The Documents page has a search box that searches the *text* of the
+Declaration, Bylaws, Rules & Regulations, Design Guidelines, the New
+Homeowner Welcome Packet, and the Insurance Summary — powered by
+`assets/data/search-index.json`, a pre-built file of text chunks pulled out
+of those PDFs ahead of time (there's no server here to search them live).
+
+This index is **not** something to hand-edit, and it doesn't update itself
+when a document changes. If you replace one of the searchable documents
+above with a revised version (a new Design Guidelines revision, an amended
+Declaration, etc.), ask whoever/whatever helped build this site originally
+to regenerate `assets/data/search-index.json` from the new PDF text — the
+search box will otherwise keep returning results from the old version.
+Adding a document that *isn't* in that list (a map, a reserve study, the
+Certificate of Continued Existence) doesn't require touching the index at
+all; it just won't be searchable, which is fine for documents nobody
+searches within.
 
 ## Adding meeting minutes
 
