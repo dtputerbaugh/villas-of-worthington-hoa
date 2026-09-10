@@ -1,8 +1,12 @@
-// Renders the Documents page list from documents/documents.json.
+// Renders the Documents page list from documents/documents.json, grouped
+// into categories.
 //
 // To add a new document: drop the PDF into the /documents folder, then add
 // one entry to documents/documents.json (see README.md for the exact
-// steps). No HTML editing required.
+// steps). Set "category" to one of the existing category names to group it
+// with similar documents, or a new name to start a new group -- groups are
+// shown in the order their first document appears in the file. No HTML
+// editing required.
 document.addEventListener("DOMContentLoaded", function () {
   var list = document.getElementById("doc-list");
   if (!list) return;
@@ -14,8 +18,11 @@ document.addEventListener("DOMContentLoaded", function () {
     })
     .then(function (docs) {
       list.innerHTML = "";
-      docs.forEach(function (doc) {
-        list.appendChild(renderDocItem(doc));
+      groupByCategory(docs).forEach(function (group) {
+        list.appendChild(renderCategoryHeading(group.category));
+        group.docs.forEach(function (doc) {
+          list.appendChild(renderDocItem(doc));
+        });
       });
     })
     .catch(function (err) {
@@ -26,6 +33,34 @@ document.addEventListener("DOMContentLoaded", function () {
         "instead (see README.md) — browsers block this kind of file loading " +
         "for pages opened with file://.</li>";
     });
+
+  // Groups documents by their "category" field, preserving the order each
+  // category first appears in the source file (uncategorized documents,
+  // if any, land in a trailing "Other Documents" group).
+  function groupByCategory(docs) {
+    var order = [];
+    var byCategory = {};
+    docs.forEach(function (doc) {
+      var cat = doc.category || "Other Documents";
+      if (!byCategory[cat]) {
+        byCategory[cat] = [];
+        order.push(cat);
+      }
+      byCategory[cat].push(doc);
+    });
+    return order.map(function (cat) {
+      return { category: cat, docs: byCategory[cat] };
+    });
+  }
+
+  function renderCategoryHeading(category) {
+    var li = document.createElement("li");
+    li.className = "doc-category-heading";
+    var h2 = document.createElement("h2");
+    h2.textContent = category;
+    li.appendChild(h2);
+    return li;
+  }
 
   function renderDocItem(doc) {
     var li = document.createElement("li");
