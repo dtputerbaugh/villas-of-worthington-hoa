@@ -1,5 +1,11 @@
 [
   {
+    "title": "New Homeowner Welcome Packet",
+    "file": "New-Homeowner-Welcome-Packet.pdf",
+    "note": "Prepared by the Board, 2026 — a plain-language summary of dues, the Board, ARC, key rules, insurance, and the reserve fund. Start here; the documents below have the full legal text.",
+    "category": "For New Homeowners"
+  },
+  {
     "title": "Declaration of Covenants, Conditions & Restrictions",
     "file": "Declaration.pdf",
     "note": "Amended and Restated. Recorded May 8, 2008 — Cuyahoga County Instrument No. 200805080525.",
@@ -46,6 +52,12 @@
     "file": "Reserve-Study-2016.pdf",
     "note": "Prior Reserve Study, kept for historical reference.",
     "category": "Reserve & Financial"
+  },
+  {
+    "title": "Insurance Summary",
+    "file": "Insurance-Summary.pdf",
+    "note": "Plain-language summary of the Association's coverage — what's insured, what isn't, and why every owner still needs their own homeowner's policy.",
+    "category": "Insurance"
   },
   {
     "title": "Certificate of Continued Existence",
