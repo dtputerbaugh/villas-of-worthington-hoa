@@ -237,7 +237,7 @@ document.addEventListener("DOMContentLoaded", function () {
     total = total || data.reduce(function (sum, d) { return sum + d.value; }, 0);
 
     if (caption) {
-      caption.textContent = sourceLabel + " — " + formatMoney(total, prefix, decimals) + " total";
+      caption.textContent = sourceLabel + " · " + formatMoney(total, prefix, decimals) + " total";
     }
 
     var width = 560;
@@ -545,7 +545,7 @@ document.addEventListener("DOMContentLoaded", function () {
         return (
           '<text x="' + x(p.year).toFixed(1) + '" y="' + (y(p.value) - 10).toFixed(1) +
           '" text-anchor="' + anchor + '" font-size="11" font-weight="700" fill="var(--ink)">' +
-          formatMoney(p.value, "$") + "</text>"
+          formatCompactMoney1(p.value) + "</text>"
         );
       })
       .join("");
@@ -712,10 +712,18 @@ document.addEventListener("DOMContentLoaded", function () {
     var niceMax = Math.ceil((maxVal * 1.15) / step) * step || step;
 
     var slot = plotW / points.length;
-    var barW = Math.min(28, slot * 0.6);
+    // Wider bars (smaller gaps) once there's enough room per slot to still
+    // read the segments cleanly -- kept conservative on narrow phones so
+    // bars don't start touching.
+    var isWide = width >= 480;
+    var barW = Math.min(isWide ? 34 : 28, slot * (isWide ? 0.78 : 0.6));
 
     function y(v) {
       return padTop + plotH - (v / niceMax) * plotH;
+    }
+
+    function cxOf(i) {
+      return padLeft + slot * i + slot / 2;
     }
 
     var ticks = [];
@@ -732,9 +740,38 @@ document.addEventListener("DOMContentLoaded", function () {
       })
       .join("");
 
+    // Label every bar that has a real (non-zero) total, in a compact
+    // "$47.9k" style so the labels actually fit -- but only where they
+    // don't collide with a neighbor. Notable bars, plus the first and last
+    // non-zero bars, always get a label; the rest fill in left to right
+    // wherever there's room.
+    var minValueLabelSlot = 32;
+    var nonZeroIdx = [];
+    points.forEach(function (p, i) { if (totalOf(p) > 0) nonZeroIdx.push(i); });
+    var priority = [];
+    points.forEach(function (p, i) { if (p.notable && totalOf(p) > 0) priority.push(i); });
+    if (nonZeroIdx.length) {
+      var firstNZ = nonZeroIdx[0];
+      var lastNZ = nonZeroIdx[nonZeroIdx.length - 1];
+      if (priority.indexOf(firstNZ) === -1) priority.push(firstNZ);
+      if (priority.indexOf(lastNZ) === -1) priority.push(lastNZ);
+    }
+    nonZeroIdx.forEach(function (i) { if (priority.indexOf(i) === -1) priority.push(i); });
+
+    var shownVal = {};
+    var shownValX = [];
+    priority.forEach(function (i) {
+      var cx = cxOf(i);
+      var collides = shownValX.some(function (sx) { return Math.abs(sx - cx) < minValueLabelSlot; });
+      if (!collides) {
+        shownVal[i] = true;
+        shownValX.push(cx);
+      }
+    });
+
     var bars = points
       .map(function (p, i) {
-        var cx = padLeft + slot * i + slot / 2;
+        var cx = cxOf(i);
         var barX = cx - barW / 2;
         var total = totalOf(p);
         var cum = 0;
@@ -747,7 +784,7 @@ document.addEventListener("DOMContentLoaded", function () {
             var y1 = y(cum + it.value);
             cum += it.value;
             var h = Math.max(y0 - y1, it.value > 0 ? 1 : 0);
-            var title = p.year + " — " + it.cat + ": " + formatMoney(it.value, prefix);
+            var title = p.year + " · " + it.cat + ": " + formatMoney(it.value, prefix);
             return (
               '<rect class="stack-seg" x="' + barX.toFixed(1) + '" y="' + y1.toFixed(1) +
               '" width="' + barW.toFixed(1) + '" height="' + h.toFixed(1) + '" rx="' + rx +
@@ -755,9 +792,9 @@ document.addEventListener("DOMContentLoaded", function () {
             );
           })
           .join("");
-        var label = p.notable
+        var label = shownVal[i]
           ? '<text class="bar-value-label" x="' + cx.toFixed(1) + '" y="' + (y(total) - 8).toFixed(1) +
-            '" text-anchor="middle" font-size="11">' + formatMoney(total, prefix) + "</text>"
+            '" text-anchor="middle" font-size="11">' + formatCompactMoney1(total) + "</text>"
           : "";
         return segs + label;
       })
@@ -769,7 +806,6 @@ document.addEventListener("DOMContentLoaded", function () {
     // those (rather than a plain "every Nth" step, which can still land a
     // regular label right next to a notable one).
     var minLabelSlot = 26;
-    var cxOf = function (i) { return padLeft + slot * i + slot / 2; };
     var shown = {};
     var shownX = [];
     points.forEach(function (p, i) {
@@ -836,6 +872,19 @@ document.addEventListener("DOMContentLoaded", function () {
   function formatCompactMoney(n) {
     if (n === 0) return "$0";
     return "$" + (n / 1000).toLocaleString("en-US") + "K";
+  }
+
+  // Same compact style as formatCompactMoney, but keeps one decimal place
+  // ($47.9k) for direct value labels on bars/points, where a bare "$48K"
+  // would round away too much -- drops the ".0" when it's a clean number
+  // ($130k, not $130.0k). Values under $1,000 are shown in full instead;
+  // a decimal "k" there (e.g. "$0.6k") would read as less precise, not more.
+  function formatCompactMoney1(n) {
+    if (n === 0) return "$0";
+    if (Math.abs(n) < 1000) return "$" + Math.round(n).toLocaleString("en-US");
+    var s = (n / 1000).toFixed(1);
+    if (s.slice(-2) === ".0") s = s.slice(0, -2);
+    return "$" + s + "k";
   }
 
   function formatMoney(n, prefix, decimals) {

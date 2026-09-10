@@ -91,7 +91,7 @@ document.addEventListener("DOMContentLoaded", function () {
     lines.push("Submitted via the Villas of Worthington HOA website's ARC Request form.");
 
     var subjectAddress = v("propertyAddress") || v("ownerName") || "Villas of Worthington";
-    var subject = "ARC Request — " + subjectAddress;
+    var subject = "ARC Request: " + subjectAddress;
     var body = lines.join("\n");
 
     var mailtoUrl =
@@ -106,7 +106,7 @@ document.addEventListener("DOMContentLoaded", function () {
       status.textContent =
         "Your email app should now be open with this request filled in and " +
         "addressed to " + BOARD_EMAIL + ". Review it, attach any files noted " +
-        "above, and click Send there — this page cannot send it for you.";
+        "above, and click Send there. This page cannot send it for you.";
     }
   });
 });

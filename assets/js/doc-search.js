@@ -81,7 +81,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (top.length === 0) {
       results.innerHTML =
         '<li class="doc-list-empty">No matches for &ldquo;' + escapeHtml(query) +
-        '&rdquo;. Try fewer or different words &mdash; e.g. "fence" instead of ' +
+        '&rdquo;. Try fewer or different words, e.g. "fence" instead of ' +
         '"fence height rules."</li>';
       return;
     }

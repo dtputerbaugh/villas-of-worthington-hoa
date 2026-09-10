@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", function () {
         '<li class="doc-list-error">Documents could not be loaded right now (' +
         escapeHtml(err.message) +
         "). If you're viewing this file directly from disk, run a local server " +
-        "instead (see README.md) — browsers block this kind of file loading " +
+        "instead (see README.md); browsers block this kind of file loading " +
         "for pages opened with file://.</li>";
     });
 
