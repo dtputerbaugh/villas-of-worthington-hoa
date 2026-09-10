@@ -174,7 +174,7 @@ img {
 /* ---- Hero / page header -------------------------------------------------- */
 
 .page-header {
-  padding: 2.75rem 0 2rem;
+  padding: 2.5rem 0 1.5rem;
 }
 
 .hero {
@@ -285,7 +285,7 @@ img {
 /* ---- Sections / cards ---------------------------------------------------- */
 
 .section {
-  padding: 2.75rem 0;
+  padding: 2.25rem 0;
 }
 
 .section + .section {

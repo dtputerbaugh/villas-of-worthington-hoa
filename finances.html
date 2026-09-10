@@ -162,13 +162,13 @@
         </div>
         <div class="stat-tile">
           <div class="stat-label">Resident portal added, per year</div>
-          <div class="stat-value">$2,400</div>
-          <div class="stat-sub">PayHOA, estimated at ~$200/month</div>
+          <div class="stat-value">$1,200</div>
+          <div class="stat-sub">PayHOA, estimated at ~$100/month</div>
         </div>
         <div class="stat-tile">
           <div class="stat-label">↓ Estimated net savings, per year</div>
-          <div class="stat-value good">$6,015</div>
-          <div class="stat-sub">≈ $4.40/unit/month, before any other budget changes</div>
+          <div class="stat-value good">$7,215</div>
+          <div class="stat-sub">≈ $5.27/unit/month, before any other budget changes</div>
         </div>
       </div>
 
@@ -244,37 +244,27 @@
       </div>
 
       <div class="chart-card">
-        <h3>Anticipated reserve expenditures by category, 2025&ndash;2039</h3>
-        <p class="chart-caption">
-          Dollar amount of planned reserve spending by year and component,
-          from the 2025 Reserve Study's component schedule; most years are
-          quiet, with occasional larger planned replacements.
-        </p>
-        <div class="bar-chart-wrap" id="expenditures-chart"></div>
-        <ul class="chart-legend" id="expenditures-legend"></ul>
-        <details class="chart-table-toggle">
-          <summary>View as a table</summary>
-          <div class="chart-table-scroll"><table class="chart-table" id="expenditures-table"></table></div>
-        </details>
-        <p class="chart-caption" style="margin-top: 1rem; margin-bottom: 0;">
-          Beyond 2039, the single largest planned expense is the pond system
-          replacement, estimated at roughly $214,870 in 2042, the
-          Association's largest reserve component by far. It's excluded from
-          the chart above so it doesn't flatten every other year's bar to
-          near-invisible.
-        </p>
-      </div>
-
-      <div class="chart-card">
-        <h3>What's coming? Explore the reserve timeline</h3>
+        <h3>What's coming? Explore the reserve timeline, 2025&ndash;2039</h3>
         <p class="chart-caption">
           Click or tap a year for the reserve work planned then, and the
           balance the 2025 Reserve Study's own cash-flow model projects at
           that year's end (see the actual, bank-reconciled balance above for
-          real figures through mid-2026).
+          real figures through mid-2026). Dot size roughly tracks that
+          year's dollar amount, so quiet and busy years are visible before
+          you click anything.
         </p>
         <div class="timeline-years" id="reserve-timeline-years"></div>
         <div class="timeline-detail" id="reserve-timeline-detail"></div>
+        <p class="chart-caption" style="margin-top: 1.25rem; margin-bottom: 0.5rem;">
+          Total planned, 2025&ndash;2039, by component:
+        </p>
+        <ul class="chart-legend" id="expenditures-legend"></ul>
+        <p class="chart-caption" style="margin-top: 1.25rem; margin-bottom: 0;">
+          Beyond 2039, the single largest planned expense is the pond system
+          replacement, estimated at roughly $214,870 in 2042, the
+          Association's largest reserve component by far. It's excluded
+          above so it doesn't flatten every other year to near-invisible.
+        </p>
       </div>
 
       <div class="chart-card">
@@ -339,7 +329,7 @@
 </footer>
 
 <script src="assets/js/nav.js"></script>
-<script src="assets/js/finances.js?v=3"></script>
+<script src="assets/js/finances.js?v=4"></script>
 <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
 </body>
 </html>

@@ -172,9 +172,6 @@ document.addEventListener("DOMContentLoaded", function () {
   drawResponsive("pct-funded-chart", function (w) {
     renderLineChart("pct-funded-chart", pctFunded, w);
   });
-  drawResponsive("expenditures-chart", function (w) {
-    renderStackedYearBarChart("expenditures-chart", "expenditures-table", reserveExpenditures, RESERVE_CATEGORIES, "$", w);
-  });
   drawResponsive("spending-trend-chart", function (w) {
     renderStackedYearBarChart("spending-trend-chart", "spending-trend-table", spendingTrend, TREND_CATEGORIES, "$", w);
   });
@@ -490,26 +487,40 @@ document.addEventListener("DOMContentLoaded", function () {
     if (!yearsEl || !detailEl) return;
 
     var byYear = {};
-    points.forEach(function (p) { byYear[p.year] = p; });
+    var totalByYear = {};
+    points.forEach(function (p) {
+      byYear[p.year] = p;
+      totalByYear[p.year] = p.items.reduce(function (sum, it) { return sum + it.value; }, 0);
+    });
+    var maxTotal = Math.max.apply(null, points.map(function (p) { return totalByYear[p.year]; }));
     var selected = byYear[defaultYear] ? defaultYear : points[0].year;
 
     function renderYears() {
       yearsEl.innerHTML = "";
       points.forEach(function (p) {
-        var hasWork = p.items.length > 0;
+        var total = totalByYear[p.year];
+        var hasWork = total > 0;
         var isActive = p.year === selected;
         var btn = document.createElement("button");
         btn.type = "button";
         btn.className = "timeline-year-btn" + (hasWork ? " has-work" : "") + (isActive ? " is-active" : "");
         btn.setAttribute("aria-pressed", isActive ? "true" : "false");
         var label = hasWork
-          ? p.year + ", planned reserve work"
+          ? p.year + ", planned reserve work, " + formatMoney(total, prefix)
           : p.year + ", no planned reserve work";
         btn.setAttribute("aria-label", label);
 
         var dot = document.createElement("span");
         dot.className = "timeline-year-dot";
         dot.setAttribute("aria-hidden", "true");
+        // Dot area (not just diameter) scales with the dollar amount, so
+        // the row gives a rough sense of "quiet year vs. big year" before
+        // anything is clicked -- similar to the bubble-sized timeline idea,
+        // without a second chart duplicating the same 15 numbers.
+        if (hasWork && maxTotal > 0) {
+          var scale = 0.7 + 1.1 * Math.sqrt(total / maxTotal);
+          dot.style.transform = "scale(" + scale.toFixed(2) + ")";
+        }
         var text = document.createElement("span");
         text.textContent = p.year;
 
