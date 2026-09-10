@@ -137,10 +137,28 @@ document.addEventListener("DOMContentLoaded", function () {
     { year: 2039, items: [{ cat: "Mailbox units", value: 32672 }], notable: true },
   ];
 
+  // Year-end reserve balance, 2025-2039, read directly off the 2025 Reserve
+  // Study's own Exhibit A Cash Flow Analysis ("Anticipated Reserves at Year
+  // End" row, 0.25% return model) -- the same model and source used for
+  // reserveBalanceProjected above, just carried out further. These are the
+  // Study's own projected figures throughout (including 2025 and 2026),
+  // not the Association's actual balance -- see the "Reserve fund balance
+  // over time" chart above for actual, bank-reconciled figures, which run
+  // ahead of this model's numbers per that chart's own note.
+  var reserveBalanceByYear = {
+    2025: 74345, 2026: 83236, 2027: 93369, 2028: 103545, 2029: 114119,
+    2030: 125500, 2031: 136343, 2032: 147612, 2033: 159756, 2034: 161910,
+    2035: 174565, 2036: 185420, 2037: 196262, 2038: 209753, 2039: 190865,
+  };
+
   setupDuesSankey();
   renderStackedBar("reserve-bar", "reserve-legend", "reserve-table", reserveAllocation, "$");
   renderCategoryLegend("expenditures-legend", reserveExpenditures, RESERVE_CATEGORIES, "$");
   renderCategoryLegend("spending-trend-legend", spendingTrend, TREND_CATEGORIES, "$");
+  renderReserveTimeline(
+    "reserve-timeline-years", "reserve-timeline-detail",
+    reserveExpenditures, reserveBalanceByYear, RESERVE_CATEGORIES, "$", 2026
+  );
 
   // The line and bar charts below draw their axis/value text at a fixed
   // pixel size *in SVG units*, so if the SVG were a fixed-width viewBox
@@ -458,6 +476,110 @@ document.addEventListener("DOMContentLoaded", function () {
     var div = document.createElement("div");
     div.textContent = str;
     return div.innerHTML;
+  }
+
+  // "What's coming?" -- a clickable/tappable year picker (2025-2039) with a
+  // detail panel below it, built from the same reserveExpenditures data as
+  // the bar chart above plus the Reserve Study's own year-end balance
+  // figures. Each year button gets a small dot marking whether that year
+  // has planned reserve work, so the shape of "quiet years vs. big years"
+  // is visible before clicking anything.
+  function renderReserveTimeline(yearsId, detailId, points, balanceByYear, categories, prefix, defaultYear) {
+    var yearsEl = document.getElementById(yearsId);
+    var detailEl = document.getElementById(detailId);
+    if (!yearsEl || !detailEl) return;
+
+    var byYear = {};
+    points.forEach(function (p) { byYear[p.year] = p; });
+    var selected = byYear[defaultYear] ? defaultYear : points[0].year;
+
+    function renderYears() {
+      yearsEl.innerHTML = "";
+      points.forEach(function (p) {
+        var hasWork = p.items.length > 0;
+        var isActive = p.year === selected;
+        var btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "timeline-year-btn" + (hasWork ? " has-work" : "") + (isActive ? " is-active" : "");
+        btn.setAttribute("aria-pressed", isActive ? "true" : "false");
+        var label = hasWork
+          ? p.year + ", planned reserve work"
+          : p.year + ", no planned reserve work";
+        btn.setAttribute("aria-label", label);
+
+        var dot = document.createElement("span");
+        dot.className = "timeline-year-dot";
+        dot.setAttribute("aria-hidden", "true");
+        var text = document.createElement("span");
+        text.textContent = p.year;
+
+        btn.appendChild(dot);
+        btn.appendChild(text);
+        btn.addEventListener("click", function () {
+          if (selected === p.year) return;
+          selected = p.year;
+          renderYears();
+          renderDetail();
+        });
+        yearsEl.appendChild(btn);
+      });
+    }
+
+    function renderDetail() {
+      var p = byYear[selected];
+      var total = p.items.reduce(function (sum, it) { return sum + it.value; }, 0);
+      var balance = balanceByYear[selected];
+
+      detailEl.innerHTML = "";
+
+      var heading = document.createElement("h4");
+      heading.textContent = "Expected reserve projects, " + selected;
+      detailEl.appendChild(heading);
+
+      if (p.items.length) {
+        var list = document.createElement("ul");
+        list.className = "timeline-projects";
+        p.items.forEach(function (it) {
+          var catIndex = categories.indexOf(it.cat);
+          var color = SERIES[Math.max(catIndex, 0) % SERIES.length];
+          var li = document.createElement("li");
+          var left = document.createElement("span");
+          var swatch = document.createElement("span");
+          swatch.className = "swatch";
+          swatch.style.background = color;
+          left.appendChild(swatch);
+          left.appendChild(document.createTextNode(it.cat));
+          var right = document.createElement("span");
+          right.textContent = formatMoney(it.value, prefix);
+          li.appendChild(left);
+          li.appendChild(right);
+          list.appendChild(li);
+        });
+        detailEl.appendChild(list);
+
+        if (p.items.length > 1) {
+          var totalLine = document.createElement("p");
+          totalLine.className = "timeline-total";
+          totalLine.textContent = "Total planned for " + selected + ": " + formatMoney(total, prefix);
+          detailEl.appendChild(totalLine);
+        }
+      } else {
+        var quiet = document.createElement("p");
+        quiet.className = "timeline-quiet";
+        quiet.textContent = "No major reserve work planned for " + selected + ".";
+        detailEl.appendChild(quiet);
+      }
+
+      if (balance != null) {
+        var balP = document.createElement("p");
+        balP.className = "timeline-balance";
+        balP.textContent = "Projected reserve balance at year end: " + formatMoney(balance, prefix);
+        detailEl.appendChild(balP);
+      }
+    }
+
+    renderYears();
+    renderDetail();
   }
 
   // Actual reserve balance (solid line + area, 2019 through mid-2026),

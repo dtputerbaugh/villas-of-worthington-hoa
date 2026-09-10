@@ -1052,6 +1052,115 @@ img {
   background: var(--accent-dark);
 }
 
+/* Reserve timeline (click/tap a year to see that year's planned reserve
+   work and projected balance) */
+
+.timeline-years {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 1.25rem;
+}
+
+.timeline-year-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  min-width: 46px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  padding: 0.5rem 0.4rem 0.4rem;
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+
+.timeline-year-btn:hover {
+  background: var(--paper-alt);
+}
+
+.timeline-year-btn.is-active {
+  background: var(--accent-dark);
+  border-color: var(--accent-dark);
+  color: #fff;
+}
+
+.timeline-year-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--line);
+}
+
+.timeline-year-btn.has-work .timeline-year-dot {
+  background: var(--accent);
+}
+
+.timeline-year-btn.is-active .timeline-year-dot {
+  background: #fff;
+}
+
+.timeline-detail {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--paper-alt);
+  padding: 1.25rem 1.5rem;
+}
+
+.timeline-detail h4 {
+  margin: 0 0 0.75rem;
+  font-size: 1.15rem;
+}
+
+.timeline-projects {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.timeline-projects li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: 0.92rem;
+}
+
+.timeline-projects .swatch {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  margin-right: 0.45rem;
+  flex-shrink: 0;
+}
+
+.timeline-total {
+  margin: 0.75rem 0 0;
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+}
+
+.timeline-quiet {
+  margin: 0;
+  color: var(--ink-soft);
+  font-style: italic;
+}
+
+.timeline-balance {
+  margin: 0.9rem 0 0;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--line);
+  font-weight: 700;
+  color: var(--ink);
+}
+
 /* Sankey (single-source flow) -- carries no text of its own, so it's
    safe to let it scale freely to any width, including on mobile. */
 
