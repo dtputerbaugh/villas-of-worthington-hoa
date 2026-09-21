@@ -658,6 +658,12 @@ img {
   border-top: 1px solid var(--line);
 }
 
+.footer-updated {
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+  opacity: 0.8;
+}
+
 /* ---- Notice box ------------------------------------------------------- */
 
 .notice-box {
@@ -817,6 +823,19 @@ img {
 
 .form-status[hidden] {
   display: none;
+}
+
+.form-fallback {
+  margin-top: 1.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--line);
+  max-width: 34rem;
+}
+
+.form-fallback textarea {
+  min-height: 9rem;
+  font-size: 0.85rem;
+  margin-bottom: 0.75rem;
 }
 
 /* ---- Finances: stat tiles, KPI rows, charts -----------------------------

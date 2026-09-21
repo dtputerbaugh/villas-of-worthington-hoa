@@ -11,6 +11,38 @@ document.addEventListener("DOMContentLoaded", function () {
 
   var BOARD_EMAIL = "board@villasofworthingtonhoa.com";
   var status = document.getElementById("arc-form-status");
+  var fallback = document.getElementById("arc-form-fallback");
+  var fallbackText = document.getElementById("arc-form-fallback-text");
+  var copyBtn = document.getElementById("arc-form-copy-btn");
+  var copyStatus = document.getElementById("arc-form-copy-status");
+
+  // Most email clients and browsers start truncating or refusing mailto:
+  // links somewhere around 2,000 characters (Outlook's own limit is close
+  // to that). A long "Description of Proposed Work" can realistically push
+  // this form past it, so anything over this is treated as too long to
+  // trust to a mailto: link at all -- the fallback below is used instead of
+  // attempting one.
+  var MAILTO_SAFE_LENGTH = 1800;
+
+  if (copyBtn) {
+    copyBtn.addEventListener("click", function () {
+      var text = fallbackText.value;
+      var showCopyStatus = function (msg) {
+        if (!copyStatus) return;
+        copyStatus.hidden = false;
+        copyStatus.textContent = msg;
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(
+          function () { showCopyStatus("Copied. Paste it into an email to " + BOARD_EMAIL + "."); },
+          function () { fallbackText.select(); showCopyStatus("Couldn't copy automatically -- text is selected, use your device's copy command."); }
+        );
+      } else {
+        fallbackText.select();
+        showCopyStatus("Text is selected -- use your device's copy command (e.g. Ctrl/Cmd+C).");
+      }
+    });
+  }
 
   form.addEventListener("submit", function (e) {
     e.preventDefault();
@@ -99,14 +131,31 @@ document.addEventListener("DOMContentLoaded", function () {
       "?subject=" + encodeURIComponent(subject) +
       "&body=" + encodeURIComponent(body);
 
-    window.location.href = mailtoUrl;
+    // Always fill in the copy/paste fallback before attempting mailto:, so
+    // it's ready regardless of whether the email app opens.
+    if (fallbackText) {
+      fallbackText.value = "To: " + BOARD_EMAIL + "\nSubject: " + subject + "\n\n" + body;
+    }
+
+    var tooLong = mailtoUrl.length > MAILTO_SAFE_LENGTH;
+    if (!tooLong) {
+      window.location.href = mailtoUrl;
+    }
 
     if (status) {
       status.hidden = false;
-      status.textContent =
-        "Your email app should now be open with this request filled in and " +
-        "addressed to " + BOARD_EMAIL + ". Review it, attach any files noted " +
-        "above, and click Send there. This page cannot send it for you.";
+      status.textContent = tooLong
+        ? "This request is too long for a mailto: link to carry reliably. " +
+          "Use the copy/paste option below instead of waiting for an email " +
+          "app to open."
+        : "Your email app should now be open with this request filled in and " +
+          "addressed to " + BOARD_EMAIL + ". Review it, attach any files noted " +
+          "above, and click Send there. This page cannot send it for you. If " +
+          "nothing opened, use the copy/paste option below instead.";
+    }
+
+    if (fallback) {
+      fallback.hidden = false;
     }
   });
 });

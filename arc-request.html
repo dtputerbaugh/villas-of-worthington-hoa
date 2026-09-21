@@ -193,6 +193,17 @@
             Board until you do.
           </p>
           <p class="form-status" id="arc-form-status" hidden></p>
+
+          <div class="form-fallback" id="arc-form-fallback" hidden>
+            <p class="help-text">
+              If your email app didn&rsquo;t open (common on phones without
+              one set up), copy the message below and send it yourself to
+              <a href="mailto:board@villasofworthingtonhoa.com">board@villasofworthingtonhoa.com</a>.
+            </p>
+            <textarea id="arc-form-fallback-text" readonly rows="10" aria-label="Request text to copy and email manually"></textarea>
+            <button type="button" class="btn btn-secondary" id="arc-form-copy-btn">Copy message</button>
+            <p class="form-status" id="arc-form-copy-status" hidden></p>
+          </div>
         </div>
       </form>
     </div>
@@ -202,7 +213,7 @@
 <footer class="site-footer">
   <div class="container">
     <div class="footer-row">
-      <span>&copy; <span id="year"></span> Villas at Worthington Homeowners Association, Inc.</span>
+      <span>&copy; <span id="year">2026</span> Villas at Worthington Homeowners Association, Inc.</span>
       <span>North Royalton, Ohio</span>
     </div>
     <nav class="footer-links" aria-label="Footer">
@@ -211,11 +222,12 @@
       <a href="contact.html">Contact</a>
       <a href="mailto:board@villasofworthingtonhoa.com">board@villasofworthingtonhoa.com</a>
     </nav>
+    <p class="footer-updated">Page last updated: September 21, 2026</p>
   </div>
 </footer>
 
 <script src="assets/js/nav.js"></script>
-<script src="assets/js/arc-form.js?v=3"></script>
+<script src="assets/js/arc-form.js?v=4"></script>
 <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
 </body>
 </html>

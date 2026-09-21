@@ -16,6 +16,7 @@ paid hosting required. This guide assumes no coding experience.
 ├── finances.html         Dues, self-managed outlook & reserve fund charts
 ├── minutes.html          Meeting minutes (placeholder until posted)
 ├── contact.html          Contact page
+├── 404.html               Shown for any URL that doesn't exist
 ├── documents/
 │   ├── documents.json     The list that documents.html reads
 │   ├── New-Homeowner-Welcome-Packet.pdf
@@ -112,6 +113,21 @@ Certificate of Continued Existence) doesn't require touching the index at
 all; it just won't be searchable, which is fine for documents nobody
 searches within.
 
+### Keeping the no-JavaScript fallback in sync
+
+The Documents and Minutes pages both build their lists with JavaScript
+(fetching `documents.json` / `minutes.json`), so a visitor with JavaScript
+turned off, or whose browser blocks the request, would otherwise see a
+permanently empty page. Both pages carry a `<noscript>` block — plain,
+static HTML links to the same PDFs — that only renders in that situation
+(browsers with JavaScript on never show it, so most visitors never see
+it). It's **not** generated automatically: whenever you add, remove, or
+rename a document in `documents.json` or `minutes.json`, make the same
+change to the `<noscript>` block near the bottom of the matching `<ul
+class="doc-list">` in `documents.html` or `minutes.html`. Missing this
+just means the no-JS fallback is stale, not that the (JavaScript) page
+visitors actually see is affected — but it's worth keeping current.
+
 ## Adding meeting minutes
 
 Same pattern as documents, one folder over: drop the PDF into `minutes/`
@@ -124,6 +140,9 @@ and add one entry to `minutes/minutes.json` — e.g.
   "note": "Approved October 2026"
 }
 ```
+
+(Update the `<noscript>` fallback in `minutes.html` too — see "Keeping the
+no-JavaScript fallback in sync" above.)
 
 `minutes/minutes.json` starts as an empty list (`[]`), which is why the
 Minutes page currently shows a "work in progress" notice instead of a
@@ -154,6 +173,51 @@ once per repository:
 After that one-time step, every push to `main` deploys automatically using
 `.github/workflows/deploy.yml`.
 
+**Keep this repository public.** On a free GitHub account, GitHub Pages
+cannot publish from a private repository at all — the repo just being
+public is what makes the *site* public, and that's fine, since nothing in
+here is sensitive (see "Confirm the public PDFs are meant to be public"
+below for the one thing worth double-checking on that front). If the repo
+is ever switched to private, GitHub silently disables Pages (it resets
+**Settings → Pages → Source** back to "None"); the fix is to switch the
+repo back to public and re-select **GitHub Actions** as the source there,
+then re-run the "Deploy site to GitHub Pages" workflow from the **Actions**
+tab. Keeping the *site* itself private while the repo stays public isn't
+possible on GitHub Pages; that would need a different host entirely.
+
+### Moving to a custom domain
+
+The site currently lives at `dtputerbaugh.github.io/villas-of-worthington-hoa/`.
+Moving it to a real domain (e.g. `villasofworthingtonhoa.com`) takes a few
+manual steps, done once:
+
+1. **Add a `CNAME` file** to the repository root containing just the
+   domain (e.g. `villasofworthingtonhoa.com`), no `http://` and no path.
+2. **Point DNS at GitHub Pages** — with whoever sells/hosts the domain,
+   add the DNS records GitHub's own docs specify for a Pages custom domain
+   (either an apex `A`/`AAAA` record, or a `CNAME` record if using a
+   subdomain like `www`). See GitHub's "Managing a custom domain for your
+   GitHub Pages site" docs for the exact records — they change occasionally,
+   so check there rather than relying on old instructions.
+3. Once DNS has propagated, go to **Settings → Pages** and enable
+   **Enforce HTTPS** (GitHub needs the DNS in place first before it can
+   issue a certificate; this checkbox may be greyed out until then).
+4. **Update `404.html`.** It has a `<base href="https://dtputerbaugh.github.io/villas-of-worthington-hoa/">`
+   tag near the top (see the comment above it) so the page's links and
+   styling still work no matter how deep a mistyped URL was. Change that
+   one `href` to the new domain (e.g. `https://villasofworthingtonhoa.com/`)
+   — nothing else on the page needs to change.
+5. **Confirm `board@villasofworthingtonhoa.com` actually receives mail**
+   before pointing anyone at the new domain. That's a separate DNS
+   question (MX records for mail) from the website's own DNS records above
+   — whoever set up that inbox can confirm it's unaffected, but it's worth
+   checking explicitly rather than assuming, since it's easy to change the
+   website's DNS without touching mail and vice versa.
+6. **Re-check every `mailto:` link and the PayHOA link** after the move.
+   They're absolute URLs (not relative to this site), so they should keep
+   working unchanged — but it's a five-minute check worth doing once,
+   rather than assuming.
+
 ### Alternative: Cloudflare Pages
 
 This site also works unchanged on Cloudflare Pages, if the Association
@@ -177,8 +241,17 @@ attach any files, and click Send themselves.
 - The checkbox lists (type of request, attachments) and the mailto message
   format live in the same file if the form's fields ever need to change.
 - Because this relies on the visitor's own email app, it won't work for
-  someone without one configured on their device — the direct email
-  address on the Contact page is the fallback for that case.
+  someone without one configured on their device. For that case, the form
+  always reveals a "copy the message and send it yourself" box after
+  submitting, with a **Copy message** button — this isn't conditional on
+  detecting whether the email app actually opened (a static site can't
+  reliably detect that), so it's just always there as a fallback. The
+  direct email address on the Contact page is the other fallback.
+- If the typed answers make the message too long for a `mailto:` link to
+  carry reliably (a generous but real limit — `MAILTO_SAFE_LENGTH` near
+  the top of `assets/js/arc-form.js`), the form skips attempting the
+  `mailto:` link entirely and goes straight to the copy/paste box instead,
+  so nothing silently truncates in the visitor's email app.
 - Browsers can cache `.js` files, so a visitor who has the ARC page
   already open (or revisits it soon after) may keep running the *old*
   script even after a new version is live. Whenever `arc-form.js`
@@ -194,18 +267,25 @@ page and in `assets/js/finances.js`, because updating them (a new year's
 actuals, a new Reserve Study) means someone is deliberately revising the
 numbers, not just dropping in a new file.
 
-- The charts (a flow diagram, two stacked-by-category year-bar charts, a
-  stacked bar, and a line chart) are drawn by `assets/js/finances.js` —
-  each dataset is a small array near the top of the file (`duesBreakdown`,
-  `spendingTrend`, `reserveAllocation`, `reserveExpenditures`, `pctFunded`),
-  with a comment above each explaining where its numbers came from. Change
-  the numbers there; the diagrams, legends, and the "View as a table"
-  tables all regenerate from the same array. `spendingTrend` and
-  `reserveExpenditures` use a small array of `{ cat, value }` items per
-  year rather than a single number, so each year's bar can be split and
-  color-coded by category — `TREND_CATEGORIES` and `RESERVE_CATEGORIES`
-  (just above each dataset) list the categories in the fixed order that
-  sets their color.
+- The charts and the interactive reserve timeline are drawn by
+  `assets/js/finances.js` — each dataset is a small array (or, for
+  `reserveBalanceByYear`, an object) near the top of the file
+  (`duesBreakdown`, `spendingTrend`, `reserveAllocation`,
+  `reserveExpenditures`, `reserveBalanceByYear`, `pctFunded`), with a
+  comment above each explaining where its numbers came from. Change the
+  numbers there; the diagrams, legends, tables, and the timeline's
+  year-by-year detail panel all regenerate from the same arrays.
+  `spendingTrend` and `reserveExpenditures` use a small array of
+  `{ cat, value }` items per year rather than a single number, so each
+  year's bar (or, for `reserveExpenditures`, each year's entry in the
+  timeline) can be split and color-coded by category —
+  `TREND_CATEGORIES` and `RESERVE_CATEGORIES` (just above each dataset)
+  list the categories in the fixed order that sets their color.
+  `reserveExpenditures` also drives the "What's coming? Explore the
+  reserve timeline" section (click a year, see that year's planned work);
+  `reserveBalanceByYear` supplies that timeline's year-end balance figure
+  and is read from the 2025 Reserve Study's own cash-flow projection, not
+  the Association's actual balance — see the comment above it.
 - The stat tiles (the boxed numbers like "$400" or "Fully Funded") are
   plain text in `finances.html` — edit them directly.
 - When a new Reserve Study or a finalized self-managed budget is adopted,
@@ -221,10 +301,15 @@ relevant `.html` file in GitHub, click the pencil/edit icon, and change
 the text directly. Look for `<!-- TODO ... -->` comments in the files —
 each one marks a spot still waiting on real information.
 
-The home page's "Resident Portal (PayHOA)" button links to the
-community's PayHOA sign-up page. If that link ever changes (a new PayHOA
-account, a straight login link instead of sign-up, etc.), it's the `href`
-on that one button near the top of `index.html`.
+The PayHOA link (`https://app.payhoa.com/sign-up/...`) appears in several
+places: the home page's "Resident Portal (PayHOA)" button, the "Where
+this goes" routing list on the Contact page, and the footer of every
+page. It's currently PayHOA's *sign-up* URL — worth confirming with
+PayHOA (or checking the page it lands on) whether that's the right link
+for existing residents too, or whether a separate login URL should be
+used there instead. If it ever changes, it's the same `href` repeated in
+each of those spots (search the codebase for `payhoa.com` to find them
+all).
 
 The Contact page's mailing address is the Board President's home address,
 which the Board formally adopted as the Association's official mailing
@@ -232,6 +317,16 @@ address in the July 21, 2026 meeting minutes. If the Board later adopts a
 different address (a new President's address, a PO box, etc.), update the
 address block on `contact.html` and note the source (e.g., the minutes
 that changed it).
+
+### "Page last updated" footer dates
+
+Every page's footer has a small "Page last updated: `<Month Day, Year>`"
+line. It's a plain hardcoded date, not generated automatically — whenever
+you make a real content change to a page (not just this README, and not
+a site-wide CSS/JS tweak that touches every page for an unrelated
+reason), update that page's own date to the day you made the change. A
+quick way to find the current value: search the file for
+`footer-updated`.
 
 ## Previewing changes before you commit (optional, for anyone comfortable
 with a terminal)
