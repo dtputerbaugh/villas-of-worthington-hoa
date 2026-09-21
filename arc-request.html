@@ -197,10 +197,17 @@
           <div class="form-fallback" id="arc-form-fallback" hidden>
             <p class="help-text">
               If your email app didn&rsquo;t open (common on phones without
-              one set up), copy the message below and send it yourself to
+              one set up), do this instead:
+            </p>
+            <p class="help-text">
+              <strong>1.</strong> Start a new email addressed to
               <a href="mailto:board@villasofworthingtonhoa.com">board@villasofworthingtonhoa.com</a>.
             </p>
-            <textarea id="arc-form-fallback-text" readonly rows="10" aria-label="Request text to copy and email manually"></textarea>
+            <p class="help-text">
+              <strong>2.</strong> Copy the text below and paste it into the
+              <strong>body</strong> of that email &mdash; not the To field.
+            </p>
+            <textarea id="arc-form-fallback-text" readonly rows="10" aria-label="Request text to paste into the body of an email"></textarea>
             <button type="button" class="btn btn-secondary" id="arc-form-copy-btn">Copy message</button>
             <p class="form-status" id="arc-form-copy-status" hidden></p>
           </div>
@@ -227,7 +234,7 @@
 </footer>
 
 <script src="assets/js/nav.js"></script>
-<script src="assets/js/arc-form.js?v=4"></script>
+<script src="assets/js/arc-form.js?v=5"></script>
 <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
 </body>
 </html>

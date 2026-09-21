@@ -252,6 +252,18 @@ attach any files, and click Send themselves.
   the top of `assets/js/arc-form.js`), the form skips attempting the
   `mailto:` link entirely and goes straight to the copy/paste box instead,
   so nothing silently truncates in the visitor's email app.
+- The copy/paste box deliberately contains only the subject and body, not
+  the board's address — the address is given separately, as its own
+  clickable `mailto:` link, right above the box. A real failure was seen
+  from combining them: a visitor select-all-pasted the whole block
+  (address included) into their email's "To" field, and the mail client
+  garbled it into a percent-encoded mess instead of a working address. If
+  `arc-form.js` is ever changed to rebuild that box, keep the address out
+  of it. Related: the board's address is deliberately **not**
+  `encodeURIComponent`-encoded in the `mailto:` URL the Prepare Email
+  button builds (only the subject/body are) — encoding turns `@` into
+  `%40`, which is legal but has caused real mail-handler chains to
+  mis-parse the recipient entirely.
 - Browsers can cache `.js` files, so a visitor who has the ARC page
   already open (or revisits it soon after) may keep running the *old*
   script even after a new version is live. Whenever `arc-form.js`

@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", function () {
       };
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(text).then(
-          function () { showCopyStatus("Copied. Paste it into an email to " + BOARD_EMAIL + "."); },
+          function () { showCopyStatus("Copied. Paste it into the body of an email addressed to " + BOARD_EMAIL + "."); },
           function () { fallbackText.select(); showCopyStatus("Couldn't copy automatically -- text is selected, use your device's copy command."); }
         );
       } else {
@@ -126,15 +126,33 @@ document.addEventListener("DOMContentLoaded", function () {
     var subject = "ARC Request: " + subjectAddress;
     var body = lines.join("\n");
 
+    // The address itself is not percent-encoded here -- it only contains
+    // characters (letters, digits, @, ., -) that are already URL-safe, and
+    // encoding the @ to %40 (which encodeURIComponent would do) is legal
+    // per RFC 6068 but has caused real mail-handler chains -- browser ->
+    // webmail redirect flows especially -- to mis-parse the recipient
+    // entirely, leaving the raw, still-encoded string sitting in the "To"
+    // field instead of a working address. Subject/body still need encoding
+    // (they contain spaces, punctuation, and newlines mailto: requires
+    // escaped).
     var mailtoUrl =
-      "mailto:" + encodeURIComponent(BOARD_EMAIL) +
+      "mailto:" + BOARD_EMAIL +
       "?subject=" + encodeURIComponent(subject) +
       "&body=" + encodeURIComponent(body);
 
     // Always fill in the copy/paste fallback before attempting mailto:, so
-    // it's ready regardless of whether the email app opens.
+    // it's ready regardless of whether the email app opens. Deliberately
+    // does NOT include "To: <address>" as part of this text -- the address
+    // is given separately, as its own mailto: link, right above. Combining
+    // them invited a real failure mode: a visitor select-all-and-pastes the
+    // whole block into their email's "To" field (a natural first move for
+    // "copy this and send it"), and multi-line text pasted into a
+    // recipient field can come out mangled/percent-encoded by the mail
+    // client itself. Keeping them separate means the worst case is a
+    // "Subject: ..." line landing at the top of the message body, which is
+    // harmless -- not a broken recipient address.
     if (fallbackText) {
-      fallbackText.value = "To: " + BOARD_EMAIL + "\nSubject: " + subject + "\n\n" + body;
+      fallbackText.value = "Subject: " + subject + "\n\n" + body;
     }
 
     var tooLong = mailtoUrl.length > MAILTO_SAFE_LENGTH;
