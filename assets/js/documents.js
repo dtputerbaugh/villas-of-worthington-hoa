@@ -1,12 +1,20 @@
-// Renders the Documents page list from documents/documents.json, grouped
-// into categories.
+// Refreshes the Documents page list from documents/documents.json.
+//
+// documents.html already ships with this exact list as real, static HTML
+// (see the comment there) -- so JavaScript is an enhancement here, not a
+// requirement. On a successful fetch, this replaces that static content
+// with a freshly-built version (so a documents.json change takes effect
+// immediately for JS-enabled visitors, even before someone regenerates
+// the static block). On failure, it deliberately leaves the existing
+// content alone rather than replacing working content with an error --
+// only logs to the console, for anyone debugging.
 //
 // To add a new document: drop the PDF into the /documents folder, then add
 // one entry to documents/documents.json (see README.md for the exact
-// steps). Set "category" to one of the existing category names to group it
-// with similar documents, or a new name to start a new group -- groups are
-// shown in the order their first document appears in the file. No HTML
-// editing required.
+// steps, including regenerating the static list in documents.html). Set
+// "category" to one of the existing category names to group it with
+// similar documents, or a new name to start a new group -- groups are
+// shown in the order their first document appears in the file.
 document.addEventListener("DOMContentLoaded", function () {
   var list = document.getElementById("doc-list");
   if (!list) return;
@@ -26,12 +34,7 @@ document.addEventListener("DOMContentLoaded", function () {
       });
     })
     .catch(function (err) {
-      list.innerHTML =
-        '<li class="doc-list-error">Documents could not be loaded right now (' +
-        escapeHtml(err.message) +
-        "). If you're viewing this file directly from disk, run a local server " +
-        "instead (see README.md); browsers block this kind of file loading " +
-        "for pages opened with file://.</li>";
+      console.error("Documents page: could not refresh the list from documents.json; showing the static version already on the page instead.", err);
     });
 
   // Groups documents by their "category" field, preserving the order each
@@ -97,11 +100,5 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     return li;
-  }
-
-  function escapeHtml(str) {
-    var div = document.createElement("div");
-    div.textContent = str;
-    return div.innerHTML;
   }
 });

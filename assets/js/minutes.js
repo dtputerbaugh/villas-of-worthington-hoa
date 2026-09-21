@@ -1,8 +1,16 @@
-// Renders the Meeting Minutes list from minutes/minutes.json, the same
-// pattern as the Documents page. To add a set of minutes once the Board
-// starts posting them: drop the PDF into /minutes and add one entry to
-// minutes/minutes.json — e.g. { "title": "September 2026 Board Meeting",
-// "file": "2026-09-Minutes.pdf", "note": "Approved October 2026" }.
+// Refreshes the Meeting Minutes list from minutes/minutes.json.
+//
+// minutes.html already ships with this exact list as real, static HTML
+// (see the comment there) -- JavaScript is an enhancement, not a
+// requirement. On success this replaces that static content with a
+// freshly-built version; on failure it leaves the existing content alone
+// rather than replacing working content with an error.
+//
+// To add a set of minutes once the Board starts posting them: drop the
+// PDF into /minutes and add one entry to minutes/minutes.json — e.g.
+// { "title": "September 2026 Board Meeting", "file": "2026-09-Minutes.pdf",
+// "note": "Approved October 2026" } (and regenerate the static list in
+// minutes.html — see README.md).
 document.addEventListener("DOMContentLoaded", function () {
   var list = document.getElementById("minutes-list");
   if (!list) return;
@@ -23,10 +31,7 @@ document.addEventListener("DOMContentLoaded", function () {
       });
     })
     .catch(function (err) {
-      list.innerHTML =
-        '<li class="doc-list-error">Meeting minutes could not be loaded right now (' +
-        escapeHtml(err.message) +
-        ").</li>";
+      console.error("Minutes page: could not refresh the list from minutes.json; showing the static version already on the page instead.", err);
     });
 
   function renderEmptyState() {
@@ -70,11 +75,5 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     return li;
-  }
-
-  function escapeHtml(str) {
-    var div = document.createElement("div");
-    div.textContent = str;
-    return div.innerHTML;
   }
 });

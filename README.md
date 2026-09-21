@@ -47,7 +47,8 @@ paid hosting required. This guide assumes no coding experience.
 
 ## Adding a new document (e.g., a new Reserve Study)
 
-You do **not** need to touch any HTML for this. Two steps:
+For the page as most visitors experience it (JavaScript on), you do
+**not** need to touch any HTML — two steps:
 
 1. **Add the PDF file.** In GitHub, open the `documents/` folder in this
    project, click **Add file → Upload files**, and upload your PDF. Give it
@@ -82,6 +83,11 @@ You do **not** need to touch any HTML for this. Two steps:
    the `main` branch, the site updates automatically within a couple of
    minutes (see **Deploying** below).
 
+   That alone is enough for every visitor with JavaScript on. For
+   JavaScript-off visitors and crawlers too, also update the static list
+   in `documents.html` — see "Keeping the Documents/Minutes lists in
+   sync" below.
+
 ### Replacing an existing document
 
 Same idea: upload the new PDF (it can reuse the old filename to overwrite
@@ -113,20 +119,36 @@ Certificate of Continued Existence) doesn't require touching the index at
 all; it just won't be searchable, which is fine for documents nobody
 searches within.
 
-### Keeping the no-JavaScript fallback in sync
+### Keeping the Documents/Minutes lists in sync
 
-The Documents and Minutes pages both build their lists with JavaScript
-(fetching `documents.json` / `minutes.json`), so a visitor with JavaScript
-turned off, or whose browser blocks the request, would otherwise see a
-permanently empty page. Both pages carry a `<noscript>` block — plain,
-static HTML links to the same PDFs — that only renders in that situation
-(browsers with JavaScript on never show it, so most visitors never see
-it). It's **not** generated automatically: whenever you add, remove, or
-rename a document in `documents.json` or `minutes.json`, make the same
-change to the `<noscript>` block near the bottom of the matching `<ul
-class="doc-list">` in `documents.html` or `minutes.html`. Missing this
-just means the no-JS fallback is stale, not that the (JavaScript) page
-visitors actually see is affected — but it's worth keeping current.
+The `<ul class="doc-list">` in `documents.html` and `minutes.html` is
+real, static HTML — the actual document list, not a "Loading…"
+placeholder — so it's there for every visitor and every crawler,
+JavaScript or not. `assets/js/documents.js` / `minutes.js` still fetch
+`documents.json` / `minutes.json` and replace that static list on
+success (so a change to the JSON alone takes effect immediately for
+JavaScript-enabled visitors, without anyone needing to touch HTML first);
+on failure, they deliberately leave the static content alone rather than
+replacing working content with an error message.
+
+This used to be a `<noscript>`-only fallback, shown solely to visitors
+with JavaScript turned off. It was changed to always-visible static
+content instead, because a `<noscript>` block is invisible to anything
+that renders the page **with** JavaScript on but doesn't fully execute
+`fetch()` — which describes some automated page-reading and review
+tools, and historically some search-engine crawlers too. Static-by-
+default content that JavaScript enhances (rather than JavaScript-only
+content with a hidden-unless-no-JS fallback) is readable by all of
+them.
+
+The tradeoff: the static list is **not** generated automatically. Adding,
+removing, or renaming a document still only requires editing
+`documents.json` / `minutes.json` (JavaScript-enabled visitors see that
+change right away, per above) — but also update the matching `<li>`
+entries in the static list in `documents.html` / `minutes.html` so
+JavaScript-off visitors and crawlers see it too. Missing this just means
+the static list is stale for that audience, not that JavaScript-enabled
+visitors are affected — but it's worth keeping current.
 
 ## Adding meeting minutes
 
@@ -141,8 +163,8 @@ and add one entry to `minutes/minutes.json` — e.g.
 }
 ```
 
-(Update the `<noscript>` fallback in `minutes.html` too — see "Keeping the
-no-JavaScript fallback in sync" above.)
+(Update the static list in `minutes.html` too — see "Keeping the
+Documents/Minutes lists in sync" above.)
 
 `minutes/minutes.json` starts as an empty list (`[]`), which is why the
 Minutes page currently shows a "work in progress" notice instead of a
