@@ -12,6 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
   var BOARD_EMAIL = "board@villasofworthingtonhoa.com";
   var status = document.getElementById("arc-form-status");
   var fallback = document.getElementById("arc-form-fallback");
+  var fallbackSubject = document.getElementById("arc-form-fallback-subject");
   var fallbackText = document.getElementById("arc-form-fallback-text");
   var copyBtn = document.getElementById("arc-form-copy-btn");
   var copyStatus = document.getElementById("arc-form-copy-status");
@@ -142,17 +143,23 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Always fill in the copy/paste fallback before attempting mailto:, so
     // it's ready regardless of whether the email app opens. Deliberately
-    // does NOT include "To: <address>" as part of this text -- the address
-    // is given separately, as its own mailto: link, right above. Combining
-    // them invited a real failure mode: a visitor select-all-and-pastes the
-    // whole block into their email's "To" field (a natural first move for
-    // "copy this and send it"), and multi-line text pasted into a
-    // recipient field can come out mangled/percent-encoded by the mail
-    // client itself. Keeping them separate means the worst case is a
-    // "Subject: ..." line landing at the top of the message body, which is
-    // harmless -- not a broken recipient address.
+    // contains ONLY the body -- no "To: <address>" line and no leading
+    // "Subject: ..." line. Both were tried and both caused real, observed
+    // problems: combining the address in caused a visitor's mail app to
+    // mangle it when the whole block got pasted into the "To" field, and
+    // separately, text that *starts* with something that reads like an
+    // email header field ("Subject: ...") was seen coming out the other
+    // side of an iPhone paste as a garbled, percent-encoded mailto-style
+    // query string -- some mail app's paste handling apparently tries to
+    // "smart parse" leading Field: value-looking text. Plain body text,
+    // with nothing header-like at the very top, sidesteps that. The
+    // suggested subject line is offered separately in fallbackSubject
+    // (rendered as ordinary sentence text, not inside anything copied).
     if (fallbackText) {
-      fallbackText.value = "Subject: " + subject + "\n\n" + body;
+      fallbackText.value = body;
+    }
+    if (fallbackSubject) {
+      fallbackSubject.textContent = subject;
     }
 
     var tooLong = mailtoUrl.length > MAILTO_SAFE_LENGTH;
